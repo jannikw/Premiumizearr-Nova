@@ -11,6 +11,8 @@ RUN mkdir /downloads
 RUN mkdir /transfers
 RUN mkdir /blackhole
 RUN mkdir -p /opt/app/
+RUN apk add --no-cache bash
+RUN apk add --no-cache wget
 
 WORKDIR /opt/app/
 

@@ -18,7 +18,8 @@ build/
 .vscode
 premiumizearrd
 premiumizearrd.exe
-
+build
+static
 dist/
 
 !cmd/premiumizearrd/
