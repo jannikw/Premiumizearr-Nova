@@ -5,12 +5,17 @@ COPY docker/root/ /
 
 EXPOSE 8182
 
+RUN addgroup -g 1000 premiumizearr \
+    && adduser -G premiumizearr -u 1000 premiumizearr -D
+
 RUN mkdir /data
 RUN mkdir /unzip
 RUN mkdir /downloads
 RUN mkdir /transfers
 RUN mkdir /blackhole
 RUN mkdir -p /opt/app/
+
+
 RUN apk add --no-cache bash
 RUN apk add --no-cache wget
 
