@@ -1,19 +1,18 @@
 package progress_downloader
 
-// https://golangcode.com/download-a-file-with-progress/
-
 import (
+	"bufio"
 	"fmt"
-	"io"
-	"net/http"
-	"os"
+	"os/exec"
+	"regexp"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/dustin/go-humanize"
 )
 
-// WriteCounter counts the number of bytes written to it. It implements to the io.Writer interface
-// and we can pass this into io.TeeReader() which will report progress on each write cycle.
+// WriteCounter counts the number of bytes written and tracks download progress.
 type WriteCounter struct {
 	StartTime  time.Time
 	LastUpdate time.Time
@@ -48,40 +47,49 @@ func (wc *WriteCounter) Write(p []byte) (int, error) {
 }
 
 func (wc WriteCounter) GetProgress() string {
-	// We use the humanize package to print the bytes in a meaningful way (e.g. 10 MB)
 	return fmt.Sprintf("%s complete", humanize.Bytes(wc.Total))
 }
 
-// DownloadFile will download a url to a local file. It's efficient because it will
-// write as it downloads and not load the whole file into memory. We pass an io.TeeReader
-// into Copy() to report progress on the download.
+// DownloadFile uses wget for downloading and updates WriteCounter for progress tracking.
 func DownloadFile(url string, filepath string, counter *WriteCounter) error {
+	// Prepare the wget command with progress in bytes
+	cmd := exec.Command("wget", "-c", "--progress=dot:mega", "-O", filepath, url)
 
-	// Create the file, but give it a tmp file extension, this means we won't overwrite a
-	// file until it's downloaded, but we'll remove the tmp extension once downloaded.
-	out, err := os.Create(filepath + ".tmp")
+	// Get a pipe for the command's output
+	stdout, err := cmd.StdoutPipe()
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to create stdout pipe: %w", err)
 	}
 
-	// Get the data
-	resp, err := http.Get(url)
-	if err != nil {
-		out.Close()
-		return err
-	}
-	defer resp.Body.Close()
-
-	if _, err = io.Copy(out, io.TeeReader(resp.Body, counter)); err != nil {
-		out.Close()
-		return err
+	// Start the command
+	if err := cmd.Start(); err != nil {
+		return fmt.Errorf("failed to start wget: %w", err)
 	}
 
-	// Close the file without defer so it can happen before Rename()
-	out.Close()
+	// Use a regex to parse progress from wget's output
+	progressRegex := regexp.MustCompile(`\d+K`) // Matches progress like "1024K", "2048K"
+	scanner := bufio.NewScanner(stdout)
 
-	if err = os.Rename(filepath+".tmp", filepath); err != nil {
-		return err
+	// Track progress
+	for scanner.Scan() {
+		line := scanner.Text()
+		matches := progressRegex.FindAllString(line, -1)
+		for _, match := range matches {
+			// Convert progress to bytes and update WriteCounter
+			sizeStr := strings.TrimSuffix(match, "K")
+			sizeInBytes, _ := strconv.ParseUint(sizeStr, 10, 64)
+			counter.Total = sizeInBytes * 1024 // K to bytes
+
+			// Print progress
+			fmt.Printf("\r%s complete (%s/s)", counter.GetProgress(), counter.GetSpeed())
+		}
 	}
+
+	// Wait for wget to finish
+	if err := cmd.Wait(); err != nil {
+		return fmt.Errorf("wget command failed: %w", err)
+	}
+
+	fmt.Println("\nDownload completed successfully.")
 	return nil
 }

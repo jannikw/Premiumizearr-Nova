@@ -1,7 +1,7 @@
 #!/usr/bin/with-contenv bash
 
 # permissions
-chown -R abc:abc \
+chown -R 1000:1000 \
     /data \
     /unzip \
     /downloads \
