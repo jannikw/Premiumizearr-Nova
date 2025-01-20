@@ -1,5 +1,5 @@
 LABEL build_version="Premiumizearr version:- ${VERSION} Build-date:- ${BUILD_DATE}"
-LABEL maintainer="JackDallas"
+LABEL maintainer="ensingerphilipp"
 
 COPY docker/root/ /
 
