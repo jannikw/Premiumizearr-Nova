@@ -19,7 +19,7 @@ deps:
 build: deps	build/web build/app
 	
 build/app:
-	go build -o $(BUILDDIR)/$(SERVICE) ./cmd/$(SERVICE)
+	go build -tags 'netgo osusergo' -ldflags '-extldflags "-static"' -o $(BUILDDIR)/$(SERVICE) ./cmd/$(SERVICE)
 
 build/web:
 	mkdir -p build
