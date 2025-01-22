@@ -1,6 +1,11 @@
 # Premiumizearr-Nova
+## Overview
 
 Continuation and Improvement of the Premiumizearr Arr* Bridge Download Client compatible with Sonarr and Radarr.
+
+This project is based on code from [Jackdallas' Premiumizearr](https://github.com/jackdalls/premiumizearr). 
+It aims to improve its function and fix bugs as the Original Repo has gone stale and does not respond to issues and pull requests.
+The code has been reused with modifications to suit my own use case.
 
 * Fixes EOF Datastream Error
 * Drastically improved download speed
@@ -32,13 +37,6 @@ docker run -d --name premiumizearr \
   --restart unless-stopped \
   ghcr.io/ensingerphilipp/premiumizearr-nova:1.3.0-rc1
 ```
-
-  
-## Overview
-
-This project is based on code from [Jackdallas' Premiumizearr](https://github.com/jackdalls/premiumizearr). 
-It aims to improve its function and fix bugs as the Original Repo has gone stale and does not respond to issues and pull requests.
-The code has been reused with modifications to suit my own use case.
 
 ## License
 
