@@ -10,7 +10,15 @@ Continuation and Improvement of the Premiumizearr Arr* Bridge Download Client co
 ## Running
 First Pre-Release v1.3.0-rc1 available.
 
-User Docker:
+Prerequisites:
+* Install Docker
+* Create Folder Structure for mounting
+* Make sure all Folders and Files are owned and accessible for UID and GID 1000
+* Create or choose the correct Docker Network
+* You might need to run it as a User with UID GID 1000 too (i havent tested yet)
+* Important: Do not use sudo
+
+Docker Run:
 ```bash
 docker run -d --name premiumizearr \
   --network=compose_default \
@@ -24,13 +32,7 @@ docker run -d --name premiumizearr \
   --restart unless-stopped \
   ghcr.io/ensingerphilipp/premiumizearr-nova:1.3.0-rc1
 ```
-Important:
 
-* Create the Folder Structure if you do not have it already (data, blackhole, downloads, unzip)
-* Make sure all used Folders and Files are owned by UID and GID 1000
-* Choose your own docker network
-* You might need to run it as a User with UID GID 1000 too
-* Do not use sudo
   
 ## Overview
 
