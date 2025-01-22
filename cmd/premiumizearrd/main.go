@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 
-	"github.com/jackdallas/premiumizearr/internal/utils"
+	"github.com/ensingerphilipp/premiumizearr-nova/internal/utils"
 )
 
 func main() {

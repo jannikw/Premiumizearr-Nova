@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/jackdallas/premiumizearr/internal/config"
+	"github.com/ensingerphilipp/premiumizearr-nova/internal/config"
 )
 
 //Service interface

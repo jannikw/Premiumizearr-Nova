@@ -3,8 +3,8 @@ package service
 import (
 	"time"
 
-	"github.com/jackdallas/premiumizearr/internal/arr"
-	"github.com/jackdallas/premiumizearr/internal/config"
+	"github.com/ensingerphilipp/premiumizearr-nova/internal/arr"
+	"github.com/ensingerphilipp/premiumizearr-nova/internal/config"
 	log "github.com/sirupsen/logrus"
 	"golift.io/starr"
 	"golift.io/starr/radarr"
