@@ -1,4 +1,4 @@
-LABEL build_version="Premiumizearr version:- ${VERSION} Build-date:- ${BUILD_DATE}"
+LABEL build_version="Premiumizearr-Nova ${TAG} Build-date:- ${BUILD_DATE}"
 LABEL maintainer="ensingerphilipp"
 
 COPY docker/root/ /
