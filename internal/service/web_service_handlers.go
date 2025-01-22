@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"path"
 
-	"github.com/jackdallas/premiumizearr/internal/config"
-	"github.com/jackdallas/premiumizearr/pkg/premiumizeme"
+	"github.com/ensingerphilipp/premiumizearr-nova/internal/config"
+	"github.com/ensingerphilipp/premiumizearr-nova/pkg/premiumizeme"
 )
 
 type TransfersResponse struct {

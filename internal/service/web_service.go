@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
-	"github.com/jackdallas/premiumizearr/internal/config"
+	"github.com/ensingerphilipp/premiumizearr-nova/internal/config"
 	log "github.com/sirupsen/logrus"
 )
 

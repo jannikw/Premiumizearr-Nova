@@ -4,7 +4,7 @@ import (
 	"errors"
 	"io/ioutil"
 
-	"github.com/jackdallas/premiumizearr/internal/utils"
+	"github.com/ensingerphilipp/premiumizearr-nova/internal/utils"
 	log "github.com/sirupsen/logrus"
 
 	"os"

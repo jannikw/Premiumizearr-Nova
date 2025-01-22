@@ -3,7 +3,7 @@
 
 Continuation and Improvement of the Premiumizearr Arr* Bridge Download Client compatible with Sonarr and Radarr.
 
-This project is based on code from [Jackdallas' Premiumizearr](https://github.com/jackdalls/premiumizearr). 
+This project is based on code from [Jackdallas' Premiumizearr](https://github.com/jackdallas/premiumizearr). 
 It aims to improve its function and fix bugs as the Original Repo has gone stale and does not respond to issues and pull requests.
 The code has been reused with modifications to suit my own use case.
 
@@ -44,7 +44,7 @@ This project is licensed under the **GNU General Public License v3.0** - see the
 
 ### Original Code
 
-This project reuses code from [Jackdallas' Premiumizearr](https://github.com/jackdalls/premiumizearr), which is licensed under the **GNU General Public License v3.0**.
+This project reuses code from [Jackdallas' Premiumizearr](https://github.com/jackdallas/premiumizearr), which is licensed under the **GNU General Public License v3.0**.
 
 ### Modifications
 

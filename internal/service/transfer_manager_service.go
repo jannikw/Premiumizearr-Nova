@@ -7,10 +7,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/jackdallas/premiumizearr/internal/config"
-	"github.com/jackdallas/premiumizearr/internal/progress_downloader"
-	"github.com/jackdallas/premiumizearr/internal/utils"
-	"github.com/jackdallas/premiumizearr/pkg/premiumizeme"
+	"github.com/ensingerphilipp/premiumizearr-nova/internal/config"
+	"github.com/ensingerphilipp/premiumizearr-nova/internal/progress_downloader"
+	"github.com/ensingerphilipp/premiumizearr-nova/internal/utils"
+	"github.com/ensingerphilipp/premiumizearr-nova/pkg/premiumizeme"
 	log "github.com/sirupsen/logrus"
 )
 

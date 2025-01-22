@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/jackdallas/premiumizearr/internal/config"
+	"github.com/ensingerphilipp/premiumizearr-nova/internal/config"
 )
 
 type ConfigChangeResponse struct {

@@ -7,11 +7,11 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/jackdallas/premiumizearr/internal/config"
-	"github.com/jackdallas/premiumizearr/internal/directory_watcher"
-	"github.com/jackdallas/premiumizearr/internal/utils"
-	"github.com/jackdallas/premiumizearr/pkg/premiumizeme"
-	"github.com/jackdallas/premiumizearr/pkg/stringqueue"
+	"github.com/ensingerphilipp/premiumizearr-nova/internal/config"
+	"github.com/ensingerphilipp/premiumizearr-nova/internal/directory_watcher"
+	"github.com/ensingerphilipp/premiumizearr-nova/internal/utils"
+	"github.com/ensingerphilipp/premiumizearr-nova/pkg/premiumizeme"
+	"github.com/ensingerphilipp/premiumizearr-nova/pkg/stringqueue"
 	log "github.com/sirupsen/logrus"
 )
 

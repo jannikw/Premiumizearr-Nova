@@ -1,4 +1,4 @@
-module github.com/jackdallas/premiumizearr
+module github.com/ensingerphilipp/premiumizearr-nova
 
 go 1.17
 

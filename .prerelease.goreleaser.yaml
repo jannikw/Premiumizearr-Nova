@@ -51,8 +51,8 @@ nfpms:
   -
     package_name: premiumizearr
     bindir: /opt/premiumizearrd
-    vendor: Jack Dallas.
-    homepage: https://github.com/JackDallas/Premiumizearr
+    vendor: Philipp Ensinger
+    homepage: https://github.com/ensingerphilipp/premiumizearr-nova
     maintainer: Dallas <jack-dallas@outlook.com>
     description: Service to connect premiumize.me to Arr clients.
     license: GPLv3
@@ -72,7 +72,7 @@ dockers:
     goos: linux
     goarch: amd64
     image_templates:
-    - "ghcr.io/jackdallas/premiumizearr:{{ .Tag }}-amd64"
+    - "ghcr.io/ensingerphilipp/premiumizearr-nova:{{ .Tag }}-amd64"
     skip_push: "false"
     build_flag_templates:
     - "--pull"
@@ -80,7 +80,7 @@ dockers:
     - "--label=org.opencontainers.image.title={{.ProjectName}}"
     - "--label=org.opencontainers.image.revision={{.FullCommit}}"
     - "--label=org.opencontainers.image.version={{.Version}}"
-    - "--label=org.opencontainers.image.source=\"https://github.com/JackDallas/Premiumizearr\""
+    - "--label=org.opencontainers.image.source=\"https://github.com/ensingerphilipp/premiumizearr-nova\""
     - "--platform=linux/amd64"
     dockerfile: "docker/Dockerfile.amd64"
     extra_files:
@@ -91,7 +91,7 @@ dockers:
     goos: linux
     goarch: arm64
     image_templates:
-    - "ghcr.io/jackdallas/premiumizearr:{{ .Tag }}-arm64"
+    - "ghcr.io/ensingerphilipp/premiumizearr-nova:{{ .Tag }}-arm64"
     skip_push: "false"
     build_flag_templates:
     - "--pull"
@@ -99,7 +99,7 @@ dockers:
     - "--label=org.opencontainers.image.title={{.ProjectName}}"
     - "--label=org.opencontainers.image.revision={{.FullCommit}}"
     - "--label=org.opencontainers.image.version={{.Version}}"
-    - "--label=org.opencontainers.image.source=\"https://github.com/JackDallas/Premiumizearr\""
+    - "--label=org.opencontainers.image.source=\"https://github.com/ensingerphilipp/premiumizearr-nova\""
     - "--platform=linux/arm64"
     dockerfile: "docker/Dockerfile.arm64"
     extra_files:
@@ -111,7 +111,7 @@ dockers:
     goarch: arm
     goarm: 7
     image_templates:
-    - "ghcr.io/jackdallas/premiumizearr:{{ .Tag }}-armv7"
+    - "ghcr.io/ensingerphilipp/premiumizearr-nova:{{ .Tag }}-armv7"
     skip_push: "false"
     build_flag_templates:
     - "--pull"
@@ -119,7 +119,7 @@ dockers:
     - "--label=org.opencontainers.image.title={{.ProjectName}}"
     - "--label=org.opencontainers.image.revision={{.FullCommit}}"
     - "--label=org.opencontainers.image.version={{.Version}}"
-    - "--label=org.opencontainers.image.source=\"https://github.com/JackDallas/Premiumizearr\""
+    - "--label=org.opencontainers.image.source=\"https://github.com/ensingerphilipp/premiumizearr-nova\""
     - "--platform=linux/arm/v7"
     dockerfile: "docker/Dockerfile.armv7"
     extra_files:
@@ -128,20 +128,20 @@ dockers:
 
 docker_manifests:
   - skip_push: false
-  - name_template: 'ghcr.io/jackdallas/premiumizearr:dev'
+  - name_template: 'ghcr.io/ensingerphilipp/premiumizearr-nova:dev'
     image_templates:
-    - 'ghcr.io/jackdallas/premiumizearr:{{ .Tag }}-amd64'
-    - 'ghcr.io/jackdallas/premiumizearr:{{ .Tag }}-armv7'
-    - 'ghcr.io/jackdallas/premiumizearr:{{ .Tag }}-arm64'
-  - name_template: 'ghcr.io/jackdallas/premiumizearr:{{ .Tag }}'
+    - 'ghcr.io/ensingerphilipp/premiumizearr-nova:{{ .Tag }}-amd64'
+    - 'ghcr.io/ensingerphilipp/premiumizearr-nova:{{ .Tag }}-armv7'
+    - 'ghcr.io/ensingerphilipp/premiumizearr-nova:{{ .Tag }}-arm64'
+  - name_template: 'ghcr.io/ensingerphilipp/premiumizearr-nova:{{ .Tag }}'
     image_templates:
-    - 'ghcr.io/jackdallas/premiumizearr:{{ .Tag }}-amd64'
-    - 'ghcr.io/jackdallas/premiumizearr:{{ .Tag }}-armv7'
-    - 'ghcr.io/jackdallas/premiumizearr:{{ .Tag }}-arm64'
+    - 'ghcr.io/ensingerphilipp/premiumizearr-nova:{{ .Tag }}-amd64'
+    - 'ghcr.io/ensingerphilipp/premiumizearr-nova:{{ .Tag }}-armv7'
+    - 'ghcr.io/ensingerphilipp/premiumizearr-nova:{{ .Tag }}-arm64'
 
 release:
   prerelease: true
   header: "Premiumizearr Pre-Release {{ .Tag }}"
-  footer: "**Full Changelog**: https://github.com/JackDallas/Premiumizearr/compare/{{ .PreviousTag }}...{{ .Tag }}"
+  footer: "**Full Changelog**: https://github.com/ensingerphilipp/premiumizearr-nova/compare/{{ .PreviousTag }}...{{ .Tag }}"
 
 

@@ -4,9 +4,9 @@ import (
 	"path"
 	"time"
 
-	"github.com/jackdallas/premiumizearr/internal/config"
-	"github.com/jackdallas/premiumizearr/internal/service"
-	"github.com/jackdallas/premiumizearr/pkg/premiumizeme"
+	"github.com/ensingerphilipp/premiumizearr-nova/internal/config"
+	"github.com/ensingerphilipp/premiumizearr-nova/internal/service"
+	"github.com/ensingerphilipp/premiumizearr-nova/pkg/premiumizeme"
 	"github.com/orandin/lumberjackrus"
 	log "github.com/sirupsen/logrus"
 )
