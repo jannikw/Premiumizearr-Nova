@@ -189,6 +189,8 @@ func (pm *Premiumizeme) CreateTransfer(filePath string, parentID string) error {
 		request, err = createNZBRequest(file, &url, parentID)
 	case ".magnet":
 		request, err = createMagnetRequest(file, &url, parentID)
+	case ".torrent":
+		request, err = createTorrentRequest(file, &url, parentID)
 	}
 
 	if err != nil {
@@ -397,6 +399,40 @@ func createMagnetRequest(file *os.File, url *url.URL, parentID string) (*http.Re
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
 	part, err := writer.CreateFormField("src")
+
+	if err != nil {
+		return nil, err
+	}
+
+	io.Copy(part, file)
+	writer.Close()
+
+	part, err = writer.CreateFormField("folder_id")
+
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = part.Write([]byte(parentID))
+
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := http.NewRequest("POST", url.String(), body)
+	request.Header.Add("Content-Type", writer.FormDataContentType())
+
+	if err != nil {
+		return nil, err
+	}
+
+	return request, nil
+}
+
+func createTorrentRequest(file *os.File, url *url.URL, parentID string) (*http.Request, error) {
+	body := &bytes.Buffer{}
+	writer := multipart.NewWriter(body)
+	part, err := writer.CreateFormFile("src", filepath.Base(file.Name()))
 
 	if err != nil {
 		return nil, err
