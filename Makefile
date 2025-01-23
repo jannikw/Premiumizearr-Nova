@@ -20,6 +20,7 @@ build: deps	build/web build/app
 	
 build/app:
 	go build -tags 'netgo osusergo' -ldflags '-extldflags "-static"' -o $(BUILDDIR)/$(SERVICE) ./cmd/$(SERVICE)
+	cp build/premiumizearrd premiumizearrd
 
 build/web:
 	mkdir -p build
@@ -29,4 +30,3 @@ build/web:
 
 clean:
 	$(RM) -rf build
-

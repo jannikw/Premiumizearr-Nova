@@ -59,7 +59,7 @@ nfpms:
     bindir: /opt/premiumizearrd
     vendor: Philipp Ensinger
     homepage: https://github.com/ensingerphilipp/premiumizearr-nova
-    maintainer: Dallas <jack-dallas@outlook.com>
+    maintainer: Philipp <philippensi2@gmail.com>
     description: Service to connect premiumize.me to Arr clients.
     license: GPLv3
     formats:
