@@ -19,6 +19,7 @@ The code has been reused with modifications to suit my own use case.
 Next Steps:
 * Resumable Downloads on fail
 * Fix GUI Bugs
+* Add Lidarr Support
 
 ## Features
 
