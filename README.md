@@ -1,5 +1,6 @@
 # Premiumizearr-Nova
 ## Overview
+More information and Guides coming soon
 
 Continuation and Improvement of the Premiumizearr Arr* Bridge Download Client compatible with Sonarr and Radarr.
 
