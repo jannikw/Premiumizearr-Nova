@@ -16,6 +16,10 @@ The code has been reused with modifications to suit my own use case.
 * added .torrent support
 * updated base images and dependencies
 
+Next Steps:
+* Resumable Downloads on fail
+* Fix GUI Bugs
+
 ## Features
 
 - Monitor blackhole directory to push `.magnet`, `.torrent`  and `.nzb` to Premiumize.me
