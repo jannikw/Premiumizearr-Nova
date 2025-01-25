@@ -11,7 +11,7 @@ builds:
       - windows
     main: ./cmd/premiumizearrd
     ldflags:
-      - '-extldflags "-static"'
+      - '-extldflags'
       - '-linkmode external'
     flags:
       - '-tags=netgo,osusergo' # Add build tags
