@@ -12,6 +12,11 @@ builds:
       - linux
       - windows
     main: ./cmd/premiumizearrd
+    ldflags:
+      - '-extldflags "-static"'
+      - '-linkmode external'
+    flags:
+      - '-tags=netgo,osusergo' # Add build tags
     binary: premiumizearrd
     goarch:
       - amd64
