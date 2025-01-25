@@ -1,5 +1,6 @@
 version: 2
 env:
+  - GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   - DOCKER_BUILDKIT=1 
 
 before:
