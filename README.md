@@ -10,7 +10,7 @@ This project is based on code from [Jackdallas' Premiumizearr](https://github.co
 It aims to improve its function and fix bugs as the Original Repo has gone stale and does not respond to issues and pull requests.
 The code has been reused with modifications to suit my own use case.
 
-* Fixes EOF Datastream Error
+* Mostly fixes EOF Datastream Error
 * Drastically improved download speed
 * Updated permission sets
 * added .torrent support
