@@ -57,7 +57,7 @@ func (t *TransferManagerService) Init(pme *premiumizeme.Premiumizeme, arrsManage
 }
 
 func (t *TransferManagerService) CleanUpUnzipDirPeriod() {
-	log.Info("Cleaning unzip directory")
+	log.Info("Cleaning unzip directory - last X days")
 
 	unzipBase, err := t.config.GetUnzipBaseLocation()
 	if err != nil {
@@ -117,6 +117,7 @@ func (t *TransferManagerService) CleanUpUnzipDir() {
 
 func (manager *TransferManagerService) ConfigUpdatedCallback(currentConfig config.Config, newConfig config.Config) {
 	if currentConfig.UnzipDirectory != newConfig.UnzipDirectory {
+		log.Trace("Inside ConfigUpdatedCallback")
 		manager.CleanUpUnzipDir()
 	}
 }
