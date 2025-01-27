@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/ensingerphilipp/premiumizearr-nova/pkg/premiumizeme@resumeable_downloads"
+	"github.com/ensingerphilipp/premiumizearr-nova/pkg/premiumizeme"
 	log "github.com/sirupsen/logrus"
 )
 

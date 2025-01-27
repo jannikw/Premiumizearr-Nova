@@ -6,7 +6,7 @@ import (
 	"path"
 
 	"github.com/ensingerphilipp/premiumizearr-nova/internal/config"
-	"github.com/ensingerphilipp/premiumizearr-nova/pkg/premiumizeme@resumeable_downloads"
+	"github.com/ensingerphilipp/premiumizearr-nova/pkg/premiumizeme"
 )
 
 type TransfersResponse struct {

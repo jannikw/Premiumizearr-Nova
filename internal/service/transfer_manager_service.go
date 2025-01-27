@@ -11,7 +11,7 @@ import (
 	"github.com/ensingerphilipp/premiumizearr-nova/internal/config"
 	"github.com/ensingerphilipp/premiumizearr-nova/internal/progress_downloader"
 	"github.com/ensingerphilipp/premiumizearr-nova/internal/utils"
-	"github.com/ensingerphilipp/premiumizearr-nova/pkg/premiumizeme@resumeable_downloads"
+	"github.com/ensingerphilipp/premiumizearr-nova/pkg/premiumizeme"
 	log "github.com/sirupsen/logrus"
 )
 
