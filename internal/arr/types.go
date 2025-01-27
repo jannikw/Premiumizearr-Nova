@@ -7,7 +7,7 @@ import (
 
 	"github.com/ensingerphilipp/premiumizearr-nova/internal/config"
 	"github.com/ensingerphilipp/premiumizearr-nova/internal/utils"
-	"github.com/ensingerphilipp/premiumizearr-nova/pkg/premiumizeme"
+	"github.com/ensingerphilipp/premiumizearr-nova/pkg/premiumizeme@resumeable_downloads"
 	"golift.io/starr/radarr"
 	"golift.io/starr/sonarr"
 )

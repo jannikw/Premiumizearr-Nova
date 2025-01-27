@@ -10,7 +10,7 @@ import (
 	"github.com/ensingerphilipp/premiumizearr-nova/internal/config"
 	"github.com/ensingerphilipp/premiumizearr-nova/internal/directory_watcher"
 	"github.com/ensingerphilipp/premiumizearr-nova/internal/utils"
-	"github.com/ensingerphilipp/premiumizearr-nova/pkg/premiumizeme"
+	"github.com/ensingerphilipp/premiumizearr-nova/pkg/premiumizeme@resumeable_downloads"
 	"github.com/ensingerphilipp/premiumizearr-nova/pkg/stringqueue"
 	log "github.com/sirupsen/logrus"
 )

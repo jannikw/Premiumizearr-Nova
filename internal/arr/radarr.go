@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/ensingerphilipp/premiumizearr-nova/pkg/premiumizeme"
+	"github.com/ensingerphilipp/premiumizearr-nova/pkg/premiumizeme@resumeable_downloads"
 	log "github.com/sirupsen/logrus"
 	"golift.io/starr/radarr"
 )
