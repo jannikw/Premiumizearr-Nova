@@ -12,12 +12,11 @@ The code has been reused with modifications to suit my own use case.
 
 * Mostly fixes EOF Datastream Error
 * Drastically improved download speed
-* Updated permission sets
-* added .torrent support
-* updated base images and dependencies
+* Downloads try to resume as long as Docker container is not restarted
+* Added .torrent support
+* Updated base images and dependencies
 
 Next Steps:
-* Resumable Downloads on fail
 * Fix GUI Bugs
 * Add Lidarr Support
 
