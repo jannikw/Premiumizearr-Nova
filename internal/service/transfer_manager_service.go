@@ -3,6 +3,7 @@ package service
 import (
 	"os"
 	"path"
+	"path/filepath"
 	"strings"
 	"sync"
 	"time"
@@ -52,8 +53,50 @@ func (t *TransferManagerService) Init(pme *premiumizeme.Premiumizeme, arrsManage
 	t.premiumizemeClient = pme
 	t.arrsManager = arrsManager
 	t.config = config
-	t.CleanUpUnzipDir()
+	t.CleanUpUnzipDirPeriod()
 }
+
+func (t *TransferManagerService) CleanUpUnzipDirPeriod() {
+	log.Info("Cleaning unzip directory - last X days")
+
+	unzipBase, err := t.config.GetUnzipBaseLocation()
+	if err != nil {
+		log.Errorf("Error getting unzip base location: %s", err.Error())
+		return
+	}
+
+	// Define the threshold for deletion: 7 days
+	threshold := time.Now().AddDate(0, 0, -7)
+
+	err = filepath.Walk(unzipBase, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			log.Warnf("Error accessing path %s: %s", path, err.Error())
+			return nil // Continue processing other files/directories
+		}
+
+		// Skip the base directory itself
+		if path == unzipBase {
+			return nil
+		}
+
+		// Check if the file/directory is older than 7 days
+		if info.ModTime().Before(threshold) {
+			log.Infof("Deleting %s (last modified: %s)", path, info.ModTime())
+
+			// Remove the directory/file
+			err = os.RemoveAll(path)
+			if err != nil {
+				log.Errorf("Error deleting %s: %s", path, err.Error())
+			}
+		}
+		return nil
+	})
+
+	if err != nil {
+		log.Errorf("Error cleaning unzip directory: %s", err.Error())
+	}
+}
+
 
 func (t *TransferManagerService) CleanUpUnzipDir() {
 	log.Info("Cleaning unzip directory")
@@ -74,6 +117,7 @@ func (t *TransferManagerService) CleanUpUnzipDir() {
 
 func (manager *TransferManagerService) ConfigUpdatedCallback(currentConfig config.Config, newConfig config.Config) {
 	if currentConfig.UnzipDirectory != newConfig.UnzipDirectory {
+		log.Trace("Inside ConfigUpdatedCallback")
 		manager.CleanUpUnzipDir()
 	}
 }
@@ -225,14 +269,15 @@ func (manager *TransferManagerService) HandleFinishedItem(item premiumizeme.Item
 		}
 		log.Trace("Downloading from: ", link)
 
-		tempDir, err := manager.config.GetNewUnzipLocation()
+		splitString := strings.Split(link, "/")
+
+		tempDir, err := manager.config.GetNewUnzipLocation(item.ID)
 		if err != nil {
 			log.Errorf("Could not create temp dir: %s", err)
 			manager.removeDownload(item.Name)
 			return
 		}
 
-		splitString := strings.Split(link, "/")
 		savePath := path.Join(tempDir, splitString[len(splitString)-1])
 		log.Trace("Downloading to: ", savePath)
 

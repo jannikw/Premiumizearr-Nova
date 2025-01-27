@@ -1,5 +1,4 @@
 package config
-
 import (
 	"errors"
 	"io/ioutil"
@@ -9,7 +8,9 @@ import (
 
 	"os"
 	"path"
-
+	"path/filepath"
+	"crypto/sha256"
+	"encoding/hex"
 	"gopkg.in/yaml.v2"
 )
 
@@ -198,8 +199,8 @@ func (c *Config) GetUnzipBaseLocation() (string, error) {
 	return c.UnzipDirectory, nil
 }
 
-func (c *Config) GetNewUnzipLocation() (string, error) {
-	// Create temp dir in os temp location or unzip-directory
+func (c *Config) GetNewUnzipLocation(ID string) (string, error) {
+	// Create base directory for unzipped files
 	tempDir, err := c.GetUnzipBaseLocation()
 	if err != nil {
 		return "", err
@@ -211,10 +212,21 @@ func (c *Config) GetNewUnzipLocation() (string, error) {
 		return "", err
 	}
 
+	// Generate a unique hash for the link
+	hash := sha256.Sum256([]byte(ID))
+	hashStr := hex.EncodeToString(hash[:])
+
+	// Truncate the hash to a shorter length (e.g., first 12 characters)
+	truncatedHash := hashStr[:12]
+
+	// Create the final directory path using the truncated hash
+	dir := filepath.Join(tempDir, "unzip-"+truncatedHash)
+
 	log.Trace("Creating generated unzip directory")
-	dir, err := ioutil.TempDir(tempDir, "unzip-")
+	err = os.MkdirAll(dir, os.ModePerm)
 	if err != nil {
 		return "", err
 	}
+
 	return dir, nil
 }
