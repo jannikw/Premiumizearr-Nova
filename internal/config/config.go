@@ -8,6 +8,7 @@ import (
 
 	"os"
 	"path"
+	"path/filepath"
 	"crypto/sha256"
 	"encoding/hex"
 	"gopkg.in/yaml.v2"

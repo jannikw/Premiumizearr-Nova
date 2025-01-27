@@ -56,12 +56,6 @@ func (t *TransferManagerService) Init(pme *premiumizeme.Premiumizeme, arrsManage
 	t.CleanUpUnzipDirPeriod()
 }
 
-import (
-	"os"
-	"path/filepath"
-	"time"
-)
-
 func (t *TransferManagerService) CleanUpUnzipDirPeriod() {
 	log.Info("Cleaning unzip directory")
 
