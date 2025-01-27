@@ -274,14 +274,15 @@ func (manager *TransferManagerService) HandleFinishedItem(item premiumizeme.Item
 		}
 		log.Trace("Downloading from: ", link)
 
-		tempDir, err := manager.config.GetNewUnzipLocation(link)
+		splitString := strings.Split(link, "/")
+
+		tempDir, err := manager.config.GetNewUnzipLocation(splitString[len(splitString)-1])
 		if err != nil {
 			log.Errorf("Could not create temp dir: %s", err)
 			manager.removeDownload(item.Name)
 			return
 		}
 
-		splitString := strings.Split(link, "/")
 		savePath := path.Join(tempDir, splitString[len(splitString)-1])
 		log.Trace("Downloading to: ", savePath)
 
