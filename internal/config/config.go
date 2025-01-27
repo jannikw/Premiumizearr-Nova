@@ -199,7 +199,7 @@ func (c *Config) GetUnzipBaseLocation() (string, error) {
 	return c.UnzipDirectory, nil
 }
 
-func (c *Config) GetNewUnzipLocation(link string) (string, error) {
+func (c *Config) GetNewUnzipLocation(ID string) (string, error) {
 	// Create base directory for unzipped files
 	tempDir, err := c.GetUnzipBaseLocation()
 	if err != nil {
@@ -213,7 +213,7 @@ func (c *Config) GetNewUnzipLocation(link string) (string, error) {
 	}
 
 	// Generate a unique hash for the link
-	hash := sha256.Sum256([]byte(link))
+	hash := sha256.Sum256([]byte(ID))
 	hashStr := hex.EncodeToString(hash[:])
 
 	// Truncate the hash to a shorter length (e.g., first 12 characters)
