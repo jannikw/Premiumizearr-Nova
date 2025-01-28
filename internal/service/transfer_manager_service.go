@@ -65,8 +65,8 @@ func (t *TransferManagerService) CleanUpUnzipDirPeriod() {
 		return
 	}
 
-	// Define the threshold for deletion: 7 days
-	threshold := time.Now().AddDate(0, 0, -7)
+	// Define the threshold for deletion: 4 days
+	threshold := time.Now().AddDate(0, 0, -4)
 
 	err = filepath.Walk(unzipBase, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
