@@ -77,10 +77,9 @@ If you already use this binding for something else you can edit them in the `con
 ### Sonarr/Radarr
 
 - Go to your Arr's `Download Client` settings page
-
 - Add a new Torrent Blackhole client, set the `Torrent Folder` to the previously set `BlackholeDirectory` location, set the `Watch Folder` to the previously set `DownloadsDirectory` location
-
 - Add a new Usenet Blackhole client, set the `Nzb Folder` to the previously set `BlackholeDirectory` location, set the `Watch Folder` to the previously set `DownloadsDirectory` location
+- Also: Dont forget to press the "Save" Button when editing settings inside premiumizearr-nova web-ui
 
 ### Reverse Proxy
 
