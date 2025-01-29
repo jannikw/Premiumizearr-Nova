@@ -158,8 +158,8 @@ func defaultConfig() Config {
 	return Config{
 		PremiumizemeAPIKey: "xxxxxxxxx",
 		Arrs: []ArrConfig{
-			{Name: "Sonarr", URL: "http://localhost:8989", APIKey: "xxxxxxxxx", Type: Sonarr},
-			{Name: "Radarr", URL: "http://localhost:7878", APIKey: "xxxxxxxxx", Type: Radarr},
+			{Name: "Sonarr", URL: "http://127.0.0.1:8989", APIKey: "xxxxxxxxx", Type: Sonarr},
+			{Name: "Radarr", URL: "http://127.0.0.1:7878", APIKey: "xxxxxxxxx", Type: Radarr},
 		},
 		BlackholeDirectory:              "",
 		PollBlackholeDirectory:          false,

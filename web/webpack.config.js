@@ -60,7 +60,7 @@ module.exports = {
 	devServer: {
 		hot: true,
 		proxy: {	
-			'/api': 'http://localhost:8182'
+			'/api': 'http://127.0.0.1:8182'
 		}
 	},
 	optimization: {

@@ -105,7 +105,7 @@
   function AddArr() {
     config.Arrs.push({
       Name: "New Arr",
-      URL: "http://localhost:1234",
+      URL: "http://127.0.0.1:1234",
       APIKey: "xxxxxxxx",
       Type: "Sonarr",
     });

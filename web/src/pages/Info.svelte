@@ -30,11 +30,11 @@
       unit = unit.substring(0, 2);
       switch (unit) {
         case "KB":
-          return speed * 1024;
+          return Number(speed) * 1024;
         case "MB":
-          return speed * 1024 * 1024;
+          return Number(speed) * 1024 * 1024;
         case "GB":
-          return speed * 1024 * 1024 * 1024;
+          return Number(speed) * 1024 * 1024 * 1024;
         default:
           console.log("Unknown unit: " + unit + " in message '" + m + "'");
           return 0;
@@ -55,43 +55,24 @@
   }
 
   function dataToRows(data) {
-    let rows = [];
+    if (!data) return [];
     dlSpeed = 0;
-    if (!data) return rows;
+    return data
+        .sort((a, b) => a.added - b.added) // Sort by "added" timestamp
+        .map(d => {
+            let speed = parseDLSpeedFromMessage(d.message);
+            if (!Number.isNaN(speed)) dlSpeed += speed;
 
-    for (let i = 0; i < data.length; i++) {
-      let d = data[i];
-      rows.push({
-        id: d.id,
-        name: d.name,
-        status: d.status,
-        progress: (d.progress * 100).toFixed(0) + "%",
-        message: d.message,
-      });
+            return {
+                id: d.id,
+                name: d.name,
+                status: d.status,
+                progress: (d.progress * 100).toFixed(0) + "%",
+                message: d.message,
+            };
+        });
+}
 
-      let speed = parseDLSpeedFromMessage(d.message);
-      if (!Number.isNaN(speed)) {
-        dlSpeed += speed;
-      } else {
-        console.error("Invalid speed: " + d.message);
-      }
-    }
-    return rows;
-  }
-
-  function downloadsToRows(downloads) {
-    let rows = [];
-    if (!downloads) return rows;
-
-    for (let i = 0; i < downloads.length; i++) {
-      let d = downloads[i];
-      rows.push({
-        Added: DateTime.fromMillis(d.added).toFormat('dd hh:mm:ss a'),
-        name: d.name,
-        progress: (d.progress * 100).toFixed(0) + "%",
-      });
-    }
-  }
 </script>
 
 <main>
@@ -121,6 +102,7 @@
           APIpath="api/downloads"
           zebra={true}
           totalName="Downloading: "
+          transform={dataToRows}
         />
       </Column>
     </Row>
@@ -137,7 +119,7 @@
           ]}
           APIpath="api/transfers"
           zebra={true}
-          {dataToRows}
+          transform={dataToRows}
         />
       </Column>
     </Row>
