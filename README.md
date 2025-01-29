@@ -37,7 +37,7 @@ It is highly recommended to use the amd64 and arm64 docker images.
 
 1. First create data, blackhole, downloads and unzip folders that will be mounted into the docker container.
 2. Make sure all Folders and are writeable and readable by UID 1000 and GID 1000
-3. Create or choose a network for the docker container to run in - **Important, explicitly disable ipv6 for your docker network or docker daemon as ipv6 might break some things - see https://github.com/ensingerphilipp/Premiumizearr-Nova/issues/11**
+3. Create or choose a network for the docker container to run in - **Important, explicitly disable ipv6 for your docker network or docker daemon as ipv6 might break some things - see https://github.com/ensingerphilipp/Premiumizearr-Nova/issues/12**
 5. Adapt the command below with the correct folders and network to run
 6. Do not use sudo!
 
