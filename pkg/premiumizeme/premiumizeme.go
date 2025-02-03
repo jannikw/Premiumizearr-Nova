@@ -566,3 +566,51 @@ func (pm *Premiumizeme) generateZip(ID string, srcType SRCType) (string, error) 
 
 	return res.Location, nil
 }
+
+func (pm *Premiumizeme) generateFileLink(ID string) (string, error) {
+	if pm.APIKey == "" {
+		return "", ErrAPIKeyNotSet
+	}
+
+	// Build URL with apikey
+	log.Trace("Getting Download Link for Item: ", ID)
+	url, err := pm.createPremiumizemeURL("/item/details")
+	if err != nil {
+		return "", err
+	}
+
+	// Build Values to send to endpoint
+	q := url.Query()
+	q.Set("id", ID)
+	url.RawQuery = q.Encode()
+
+	client := &http.Client{}
+	request, err := http.NewRequest("GET", url.String(), nil)
+	if err != nil {
+		return "", err
+	}
+
+	resp, err := client.Do(request)
+	if err != nil {
+		return "", err
+	}
+
+	if resp.StatusCode != 200 {
+		return "", fmt.Errorf("Error listing Item Details: %s (%d)", resp.Status, resp.StatusCode)
+	}
+
+	defer resp.Body.Close()
+	err = json.NewDecoder(resp.Body).Decode(&res)
+	res := GenerateFileLinkResponse{}
+
+	if res.Type != "File" {
+		return "", fmt.Errorf("Item Type was not File: %s", res.Type)
+	}
+
+	if err != nil {
+		return "Unknown Error: ", err
+	}
+
+	log.Debugf("File link created: %+v", res.Link)
+	return res.Link, nil
+}

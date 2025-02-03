@@ -10,6 +10,14 @@ type GenerateZipResponse struct {
 	Location string `json:"location"`
 }
 
+type GenerateFileLinkResponse struct {
+	Status string `json:"status"`
+	ID     string `json:"id"`
+	Name   string `json:"name"`
+	Link   string `json:"link"`
+	Type   string `json:"type"`
+}
+
 type ListTransfersResponse struct {
 	Status    string     `json:"status"`
 	Transfers []Transfer `json:"transfers"`
@@ -20,7 +28,7 @@ type CreateTransferResponse struct {
 	ID      string `json:"id"`
 	Name    string `json:"name"`
 	Type    string `json:"type"`
-	Message string `json:"message"`
+	Message	string `json:"message"`
 }
 
 type CreateFolderResponse struct {
