@@ -2,7 +2,9 @@
 ## Build
 
 [![Build](https://github.com/ensingerphilipp/premiumizearr-nova/actions/workflows/build.yml/badge.svg)](https://github.com/ensingerphilipp/premiumizearr-nova/actions/workflows/build.yml)
-
+## Important
+If you still have problems with downloads that cant complete and loop indefinitely i encourage you to wait for next release that switcehs from zip to direct downloads.
+Meanwhile you can reduce the issue by selecting Cloudflare as your CDN in Premiumize. (only for new transfers from this point on) 
 ## Overview
 Continuation and Improvement of the Premiumizearr Arr* Bridge Download Client compatible with Sonarr and Radarr.
 
