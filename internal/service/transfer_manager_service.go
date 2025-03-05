@@ -252,12 +252,45 @@ func (manager *TransferManagerService) HandleFinishedItem(item premiumizeme.Item
 		return
 	}
 
-	//TODO Implement download of Tranfered file, currently falls back to Zip Download
 	if item.Type != "folder" {
-		log.Errorf("Item is not of type 'folder' !! Can't handle %s", item.Name)
-		manager.HandleFinishedItemZip(item, downloadDirectory)
+		log.Errorf("Transfered Item is not a folder -> not implemented - cant be handled, please put single file into a folder: %s", item.Name)
 		return
 	}
+	//TODO Implement download of single Files
+	/* 	if item.Type == "file" {
+		log.Debugf("Item is type single file", item.Name)
+		//manager.HandleFinishedItemZip(item, downloadDirectory)
+		manager.addDownload(&item)
+		go func() {
+			defer manager.removeDownload(item.Name)
+			link, err := manager.premiumizemeClient.GenerateFileLink(item.ID)
+
+			if err != nil {
+				log.Debugf("File Link Generation err: %s", err)
+			}
+
+			var savePath = path.Join(downloadDirectory, (item.Name + "/"))
+			log.Trace("Downloading to: ", savePath)
+			err = os.Mkdir(savePath, os.ModePerm)
+			if err != nil {
+				log.Errorf("Could not create save path: %s", err)
+				//		manager.removeDownload(item.Name)
+				//		return fmt.Errorf("error creating save path: %w", err)
+			}
+
+			var fileSavePath = path.Join(savePath, item.Name)
+			log.Trace("Downloading to: ", fileSavePath)
+			err = progress_downloader.DownloadFile(link, fileSavePath, manager.downloadList[item.Name].ProgressDownloader)
+
+			if err != nil {
+				log.Errorf("error downloading file %s: %s", item.Name, err)
+				return
+			}
+			//Remove download entry from downloads map
+			//manager.removeDownload(item.Name)
+		}()
+
+	} */
 
 	//Adding of the Root-Parent-Folder of the Transfer prevents the transfer from being downloaded multiple times
 	//TODO Needs to be adjusted os the LockItem is not visible in the downloadList
