@@ -276,16 +276,14 @@ func (manager *TransferManagerService) downloadFolderRecursively(item premiumize
 	if err != nil {
 		return fmt.Errorf("error listing folder items: %w", err)
 	}
-	savePath := path.Join(downloadDirectory, item.Name)
+	savePath := path.Join(downloadDirectory, (item.Name + "/"))
 	log.Trace("Downloading to: ", savePath)
-
-	out, err := os.Create(savePath)
+	err = os.Mkdir(savePath, os.ModePerm)
 	if err != nil {
 		log.Errorf("Could not create save path: %s", err)
-		manager.removeDownload(item.Name)
-		return fmt.Errorf("error creating save path: %w", err)
+		//		manager.removeDownload(item.Name)
+		//		return fmt.Errorf("error creating save path: %w", err)
 	}
-	defer out.Close()
 
 	for _, item := range items {
 		if manager.downloadExists(item.Name) {
@@ -293,13 +291,14 @@ func (manager *TransferManagerService) downloadFolderRecursively(item premiumize
 			return nil
 		}
 		if item.Type == "file" {
-			fileSavePath := path.Join(savePath, item.Name)
 			manager.addDownload(&item)
 			defer manager.removeDownload(item.Name)
 			link, err := manager.premiumizemeClient.GenerateFileLink(item.ID)
 			if err != nil {
 				log.Debugf("File Link Generation err: %s", err)
 			}
+			var fileSavePath = path.Join(savePath, item.Name)
+			log.Trace("Downloading to: ", fileSavePath)
 			err = progress_downloader.DownloadFile(link, fileSavePath, manager.downloadList[item.Name].ProgressDownloader)
 			if err != nil {
 				return fmt.Errorf("error downloading file %s: %w", item.Name, err)
