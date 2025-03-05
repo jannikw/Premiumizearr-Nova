@@ -267,7 +267,18 @@ func (manager *TransferManagerService) HandleFinishedItem(item premiumizeme.Item
 		if err != nil {
 			log.Errorf("Error downloading item %s: %s", item.Name, err)
 			manager.removeDownload(item.Name)
+			return
 		}
+
+		err = manager.premiumizemeClient.DeleteFolder(item.ID)
+		if err != nil {
+			manager.removeDownload(item.Name)
+			log.Errorf("Error deleting folder on premiumize.me: %s", err)
+			return
+		}
+
+		//Remove download entry from downloads map
+		//manager.removeDownload(item.Name)
 	}()
 }
 
@@ -309,7 +320,6 @@ func (manager *TransferManagerService) downloadFolderRecursively(item premiumize
 				return fmt.Errorf("error downloading folder %s: %w", item.Name, err)
 			}
 		}
-		defer manager.removeDownload(item.Name)
 	}
 	return nil
 }
@@ -355,6 +365,7 @@ func (manager *TransferManagerService) HandleFinishedItemZip(item premiumizeme.I
 		savePath := path.Join(tempDir, splitString[len(splitString)-1])
 		log.Trace("Downloading to: ", savePath)
 
+		//TODO Remove that shit
 		out, err := os.Create(savePath)
 		if err != nil {
 			log.Errorf("Could not create save path: %s", err)
