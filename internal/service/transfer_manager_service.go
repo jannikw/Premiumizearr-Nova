@@ -337,7 +337,6 @@ func (manager *TransferManagerService) downloadFolderRecursively(item premiumize
 		}
 		if item.Type == "file" {
 			manager.addDownload(&item)
-			defer manager.removeDownload(item.Name)
 			link, err := manager.premiumizemeClient.GenerateFileLink(item.ID)
 			if err != nil {
 				log.Debugf("File Link Generation err: %s", err)
@@ -348,6 +347,7 @@ func (manager *TransferManagerService) downloadFolderRecursively(item premiumize
 			if err != nil {
 				return fmt.Errorf("error downloading file %s: %w", item.Name, err)
 			}
+			manager.removeDownload(item.Name)
 		} else if item.Type == "folder" {
 			err = manager.downloadFolderRecursively(item, savePath)
 			if err != nil {
