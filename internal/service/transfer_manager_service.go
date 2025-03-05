@@ -294,7 +294,9 @@ func (manager *TransferManagerService) downloadFolderRecursively(item premiumize
 		}
 		if item.Type == "file" {
 			link, err := manager.premiumizemeClient.GenerateFileLink(item.ID)
-			log.Debugf("File Link Generation err: %s", err)
+			if err != nil {
+				log.Debugf("File Link Generation err: %s", err)
+			}
 			err = progress_downloader.DownloadFile(link, savePath, manager.downloadList[item.Name].ProgressDownloader)
 			if err != nil {
 				return fmt.Errorf("error downloading file %s: %w", item.Name, err)
