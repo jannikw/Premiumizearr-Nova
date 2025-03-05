@@ -190,6 +190,7 @@ func (manager *TransferManagerService) TaskCheckPremiumizeDownloadsFolder() {
 	for _, item := range items {
 		if manager.countDownloads() < manager.config.SimultaneousDownloads {
 			log.Debugf("Processing completed item: %s", item.Name)
+			//TODO Add Config Entry
 			var zip bool = false
 			if zip == true {
 				manager.HandleFinishedItemZip(item, manager.config.DownloadsDirectory)
@@ -362,19 +363,19 @@ func (manager *TransferManagerService) HandleFinishedItemZip(item premiumizeme.I
 			return
 		}
 
-		savePath := path.Join(tempDir, splitString[len(splitString)-1])
-		log.Trace("Downloading to: ", savePath)
-
-		//TODO Remove that shit
-		out, err := os.Create(savePath)
+		savePath := path.Join(tempDir, (item.Name + "/"))
+		log.Trace("Creating DownloadDirectory: ", savePath)
+		err = os.Mkdir(savePath, os.ModePerm)
 		if err != nil {
 			log.Errorf("Could not create save path: %s", err)
-			manager.removeDownload(item.Name)
-			return
+			//		manager.removeDownload(item.Name)
+			//		return fmt.Errorf("error creating save path: %w", err)
 		}
-		defer out.Close()
 
-		err = progress_downloader.DownloadFile(link, savePath, manager.downloadList[item.Name].ProgressDownloader)
+		var fileSavePath string = path.Join(savePath, splitString[len(splitString)-1])
+		log.Trace("Downloading to: ", fileSavePath)
+
+		err = progress_downloader.DownloadFile(link, fileSavePath, manager.downloadList[item.Name].ProgressDownloader)
 
 		if err != nil {
 			log.Errorf("Could not download file: %s", err)
