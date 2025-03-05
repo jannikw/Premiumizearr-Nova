@@ -603,7 +603,7 @@ func (pm *Premiumizeme) GenerateFileLink(ID string) (string, error) {
 	var res GenerateFileLinkResponse
 	err = json.NewDecoder(resp.Body).Decode(&res)
 
-	if res.Type != "File" {
+	if res.Type != "file" {
 		return "", fmt.Errorf("Item Type was not File: %s", res.Type)
 	}
 
