@@ -1,10 +1,10 @@
 # Premiumizearr-Nova
-## Build
+## Build 1.4.0
 
 [![Build](https://github.com/ensingerphilipp/premiumizearr-nova/actions/workflows/build.yml/badge.svg)](https://github.com/ensingerphilipp/premiumizearr-nova/actions/workflows/build.yml)
-## Important
-If you still have problems with downloads that cant complete and loop indefinitely i encourage you to wait for next release that switcehs from zip to direct downloads.
-Meanwhile you can reduce the issue by selecting Cloudflare as your CDN in Premiumize. (only for new transfers from this point on) 
+
+*NEW: Revamped Download to use **direct file downloads** instead of the slow ZIP-API*
+
 ## Overview
 Continuation and Improvement of the Premiumizearr Arr* Bridge Download Client compatible with Sonarr and Radarr.
 
@@ -14,9 +14,10 @@ The code has been reused with modifications to suit my own use case.
 
 * Mostly fixes EOF Datastream Error
 * Drastically improved download speed
-* Downloads try to resume as long as Docker container is not restarted
+* Downloads try to resume 
 * Added .torrent support
 * Updated base images and dependencies
+* Changed Zip Downloads to Direct Downloads for stability and speed
 
 Next Steps:
 * Fix GUI Bugs
