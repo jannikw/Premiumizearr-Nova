@@ -567,7 +567,7 @@ func (pm *Premiumizeme) generateZip(ID string, srcType SRCType) (string, error) 
 	return res.Location, nil
 }
 
-func (pm *Premiumizeme) generateFileLink(ID string) (string, error) {
+func (pm *Premiumizeme) GenerateFileLink(ID string) (string, error) {
 	if pm.APIKey == "" {
 		return "", ErrAPIKeyNotSet
 	}
@@ -600,8 +600,8 @@ func (pm *Premiumizeme) generateFileLink(ID string) (string, error) {
 	}
 
 	defer resp.Body.Close()
+	var res GenerateFileLinkResponse
 	err = json.NewDecoder(resp.Body).Decode(&res)
-	res := GenerateFileLinkResponse{}
 
 	if res.Type != "File" {
 		return "", fmt.Errorf("Item Type was not File: %s", res.Type)

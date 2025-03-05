@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"os"
 	"path"
 	"path/filepath"
@@ -97,7 +98,6 @@ func (t *TransferManagerService) CleanUpUnzipDirPeriod() {
 	}
 }
 
-
 func (t *TransferManagerService) CleanUpUnzipDir() {
 	log.Info("Cleaning unzip directory")
 
@@ -191,11 +191,11 @@ func (manager *TransferManagerService) TaskCheckPremiumizeDownloadsFolder() {
 		if manager.countDownloads() < manager.config.SimultaneousDownloads {
 			log.Debugf("Processing completed item: %s", item.Name)
 			var zip bool = false
-			if(zip == true){
+			if zip == true {
 				manager.HandleFinishedItemZip(item, manager.config.DownloadsDirectory)
 			} else {
 				manager.HandleFinishedItem(item, manager.config.DownloadsDirectory)
-			}	
+			}
 		} else {
 			log.Debugf("Not processing any more transfers, %d are running and cap is %d", manager.countDownloads(), manager.config.SimultaneousDownloads)
 			break
@@ -253,14 +253,14 @@ func (manager *TransferManagerService) HandleFinishedItem(item premiumizeme.Item
 
 	//TODO Implement download of Tranfered file, currently falls back to Zip Download
 	if item.Type != "folder" {
-        log.InfoF("Item is not of type 'folder' !! Can't handle %s", item.Name)
-		HandleFinishedItemZip(item, downloadDirectory)
-        return
-    }
+		log.Errorf("Item is not of type 'folder' !! Can't handle %s", item.Name)
+		manager.HandleFinishedItemZip(item, downloadDirectory)
+		return
+	}
 
 	//Adding of the Root-Parent-Folder of the Transfer prevents the transfer from being downloaded multiple times
 	//TODO Needs to be adjusted os the LockItem is not visible in the downloadList
-    manager.addDownload(&item)
+	manager.addDownload(&item)
 	go func() {
 		defer manager.removeDownload(item.Name)
 		err := manager.downloadFolderRecursively(item, downloadDirectory)
@@ -272,10 +272,10 @@ func (manager *TransferManagerService) HandleFinishedItem(item premiumizeme.Item
 }
 
 func (manager *TransferManagerService) downloadFolderRecursively(item premiumizeme.Item, downloadDirectory string) error {
-    items, err := manager.premiumizemeClient.ListFolder(item.ID)
-    if err != nil {
-        return fmt.Errorf("error listing folder items: %w", err)
-    }
+	items, err := manager.premiumizemeClient.ListFolder(item.ID)
+	if err != nil {
+		return fmt.Errorf("error listing folder items: %w", err)
+	}
 	savePath := path.Join(downloadDirectory, item.Name)
 	log.Trace("Downloading to: ", savePath)
 
@@ -283,35 +283,31 @@ func (manager *TransferManagerService) downloadFolderRecursively(item premiumize
 	if err != nil {
 		log.Errorf("Could not create save path: %s", err)
 		manager.removeDownload(item.Name)
-		return
+		return fmt.Errorf("error creating save path: %w", err)
 	}
 	defer out.Close()
 
-    for _, item := range items {
+	for _, item := range items {
 		if manager.downloadExists(item.Name) {
 			log.Tracef("Transfer %s is already downloading", item.Name)
 			return nil
 		}
 		if item.Type == "file" {
-			link, err := manager.premiumizemeClient.generateFileLink(item.ID)
-			if err != nil {
-				continue fmt.Errorf("error generating download link for file %s: %w", item.Name, err)
-			}
+			link, err := manager.premiumizemeClient.GenerateFileLink(item.ID)
+			log.Debugf("File Link Generation err: %s", err)
 			err = progress_downloader.DownloadFile(link, savePath, manager.downloadList[item.Name].ProgressDownloader)
 			if err != nil {
-				continue fmt.Errorf("error downloading file %s: %w", item.Name, err)
+				return fmt.Errorf("error downloading file %s: %w", item.Name, err)
 			}
 		} else if item.Type == "folder" {
 			err = manager.downloadFolderRecursively(item, savePath)
 			if err != nil {
-				continue fmt.Errorf("error downloading folder %s: %w", item.Name, err)
+				return fmt.Errorf("error downloading folder %s: %w", item.Name, err)
 			}
 		}
 		defer manager.removeDownload(item.Name)
-        }
-    }
-
-    return nil
+	}
+	return nil
 }
 
 // Returns when the download has been added to the list
