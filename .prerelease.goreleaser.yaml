@@ -21,9 +21,8 @@ builds:
     goarch:
       - amd64
       - arm64
-      - arm
     goarm:
-      - 7
+      - 8
     ignore:
       - goos: windows
         goarch: arm64
@@ -76,7 +75,7 @@ nfpms:
       
 dockers:
   -
-    use: docker
+    use: buildx
     goos: linux
     goarch: amd64
     image_templates:
@@ -113,38 +112,16 @@ dockers:
     extra_files:
     - build/static/
     - docker/
-  -
-    use: buildx
-    goos: linux
-    goarch: arm
-    goarm: 7
-    image_templates:
-    - "ghcr.io/ensingerphilipp/premiumizearr-nova:{{ .Tag }}-armv7"
-    skip_push: "false"
-    build_flag_templates:
-    - "--pull"
-    - "--label=org.opencontainers.image.created={{.Date}}"
-    - "--label=org.opencontainers.image.title={{.ProjectName}}"
-    - "--label=org.opencontainers.image.revision={{.FullCommit}}"
-    - "--label=org.opencontainers.image.version={{.Version}}"
-    - "--label=org.opencontainers.image.source=\"https://github.com/ensingerphilipp/premiumizearr-nova\""
-    - "--platform=linux/arm/v7"
-    dockerfile: "docker/Dockerfile.armv7"
-    extra_files:
-    - build/static/
-    - docker/
 
 docker_manifests:
   - skip_push: false
   - name_template: 'ghcr.io/ensingerphilipp/premiumizearr-nova:dev'
     image_templates:
     - 'ghcr.io/ensingerphilipp/premiumizearr-nova:{{ .Tag }}-amd64'
-    - 'ghcr.io/ensingerphilipp/premiumizearr-nova:{{ .Tag }}-armv7'
     - 'ghcr.io/ensingerphilipp/premiumizearr-nova:{{ .Tag }}-arm64'
   - name_template: 'ghcr.io/ensingerphilipp/premiumizearr-nova:{{ .Tag }}'
     image_templates:
     - 'ghcr.io/ensingerphilipp/premiumizearr-nova:{{ .Tag }}-amd64'
-    - 'ghcr.io/ensingerphilipp/premiumizearr-nova:{{ .Tag }}-armv7'
     - 'ghcr.io/ensingerphilipp/premiumizearr-nova:{{ .Tag }}-arm64'
 
 release:
