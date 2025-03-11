@@ -294,7 +294,7 @@ func (manager *TransferManagerService) HandleFinishedItem(item premiumizeme.Item
 	} */
 
 	//Adding of the Root-Parent-Folder of the Transfer prevents the transfer from being downloaded multiple times
-	//TODO Needs to be adjusted os the LockItem is not visible in the downloadList
+	//TODO Needs to be adjusted so the LockItem is not visible in the downloadList
 	manager.addDownload(&item)
 	go func() {
 		defer manager.removeDownload(item.Name)
