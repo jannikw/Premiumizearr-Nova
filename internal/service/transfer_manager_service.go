@@ -58,7 +58,7 @@ func (t *TransferManagerService) Init(pme *premiumizeme.Premiumizeme, arrsManage
 }
 
 func (t *TransferManagerService) CleanUpUnzipDirPeriod() {
-	log.Info("Cleaning unzip directory - last X days")
+	log.Info("Cleaning unzip directory - deleting files older than 4 days")
 
 	unzipBase, err := t.config.GetUnzipBaseLocation()
 	if err != nil {
@@ -80,7 +80,7 @@ func (t *TransferManagerService) CleanUpUnzipDirPeriod() {
 			return nil
 		}
 
-		// Check if the file/directory is older than 7 days
+		// Check if the file/directory is older than 4 days
 		if info.ModTime().Before(threshold) {
 			log.Infof("Deleting %s (last modified: %s)", path, info.ModTime())
 
@@ -116,6 +116,7 @@ func (t *TransferManagerService) CleanUpUnzipDir() {
 }
 
 func (manager *TransferManagerService) ConfigUpdatedCallback(currentConfig config.Config, newConfig config.Config) {
+	// Todo Change to Downloads-Directory and rmeove Zip Download functionality
 	if currentConfig.UnzipDirectory != newConfig.UnzipDirectory {
 		log.Trace("Inside ConfigUpdatedCallback")
 		manager.CleanUpUnzipDir()
@@ -190,7 +191,7 @@ func (manager *TransferManagerService) TaskCheckPremiumizeDownloadsFolder() {
 	for _, item := range items {
 		if manager.countDownloads() < manager.config.SimultaneousDownloads {
 			log.Debugf("Processing completed item: %s", item.Name)
-			//TODO Add Config Entry
+			//TODO Remove Zip capability
 			var zip bool = false
 			if zip == true {
 				manager.HandleFinishedItemZip(item, manager.config.DownloadsDirectory)
