@@ -321,7 +321,7 @@
         <TextInput
           type="number"
           disabled={inputDisabled}
-          labelText="SpeedLimit Downloads"
+          labelText="SpeedLimit per Download in Megabytes / s"
           bind:value={config.DownloadSpeedLimit}
         />
       </FormGroup>
