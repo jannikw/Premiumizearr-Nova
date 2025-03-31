@@ -253,52 +253,26 @@ func (manager *TransferManagerService) HandleFinishedItem(item premiumizeme.Item
 		return
 	}
 
+	// If single Item is encountered (Torrent Download) it is moved into a new Folder with the Name of the Item to be downloaded during next refresh
 	if item.Type == "file" {
 		log.Tracef("Handling Item Type File in finished Transfer %s", item.Name)
 
-		// Create Folder with Item Name
-		// Move Item into Folder
+		id, err := manager.premiumizemeClient.CreateFolder(item.Name, &manager.downloadsFolderID)
+		if err != nil {
+			log.Errorf("Cannot create Folder for Single File Download! %+v", err)
+		}
+		var singleFileFolderID string = id
 
+		err = manager.premiumizemeClient.MoveItem(item.ID, singleFileFolderID)
+		if err != nil {
+			log.Errorf("Cannot move Single File to Folder for Download!  %+v", err)
+		}
+
+		log.Infof("Single File moved to Folder for Download %s", item.Name)
+
+		return
 	}
 
-	//TODO Implement download of single Files
-	/* 	if item.Type == "file" {
-		log.Debugf("Item is type single file", item.Name)
-		//manager.HandleFinishedItemZip(item, downloadDirectory)
-		manager.addDownload(&item)
-		go func() {
-			defer manager.removeDownload(item.Name)
-			link, err := manager.premiumizemeClient.GenerateFileLink(item.ID)
-
-			if err != nil {
-				log.Debugf("File Link Generation err: %s", err)
-			}
-
-			var savePath = path.Join(downloadDirectory, (item.Name + "/"))
-			log.Trace("Downloading to: ", savePath)
-			err = os.Mkdir(savePath, os.ModePerm)
-			if err != nil {
-				log.Errorf("Could not create save path: %s", err)
-				//		manager.removeDownload(item.Name)
-				//		return fmt.Errorf("error creating save path: %w", err)
-			}
-
-			var fileSavePath = path.Join(savePath, item.Name)
-			log.Trace("Downloading to: ", fileSavePath)
-			err = progress_downloader.DownloadFile(link, fileSavePath, manager.downloadList[item.Name].ProgressDownloader)
-
-			if err != nil {
-				log.Errorf("error downloading file %s: %s", item.Name, err)
-				return
-			}
-			//Remove download entry from downloads map
-			//manager.removeDownload(item.Name)
-		}()
-
-	} */
-
-	//Adding of the Root-Parent-Folder of the Transfer prevents the transfer from being downloaded multiple times
-	//TODO Needs to be adjusted so the LockItem is not visible in the downloadList
 	if item.Type != "folder" {
 		log.Errorf("Item Type mismatch when trying to handle finished Transfer %s | %s", item.Name, item.Type)
 		return
@@ -321,8 +295,6 @@ func (manager *TransferManagerService) HandleFinishedItem(item premiumizeme.Item
 			return
 		}
 
-		//Remove download entry from downloads map
-		//manager.removeDownload(item.Name)
 	}()
 }
 
@@ -391,7 +363,7 @@ func (manager *TransferManagerService) HandleFinishedItemZip(item premiumizeme.I
 			return
 		}
 		if err != nil {
-			log.Error("Error generating download link: %s", err)
+			log.Errorf("Error generating download link: %s", err)
 			manager.removeDownload(item.Name)
 			return
 		}

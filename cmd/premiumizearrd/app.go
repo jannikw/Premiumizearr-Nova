@@ -101,7 +101,7 @@ func (app *App) Start(logLevel string, configFile string, loggingDirectory strin
 	app.webServer.Start()
 	app.directoryWatcher.Start()
 	//Block until the program is terminated
-	app.transferManager.Run(60 * time.Second)
+	app.transferManager.Run(15 * time.Second)
 
 	return nil
 }

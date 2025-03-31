@@ -271,6 +271,54 @@ func (pm *Premiumizeme) DeleteFolder(folderID string) error {
 	return nil
 }
 
+func (pm *Premiumizeme) MoveItem(itemID string, folderID string) error {
+	if pm.APIKey == "" {
+		return ErrAPIKeyNotSet
+	}
+
+	url, err := pm.createPremiumizemeURL("/folder/paste")
+	if err != nil {
+		return err
+	}
+
+	q := url.Query()
+	q.Set("files[]", itemID)
+	q.Set("id", folderID)
+	url.RawQuery = q.Encode()
+
+	client := &http.Client{}
+	request, err := http.NewRequest("POST", url.String(), nil)
+	if err != nil {
+		return err
+	}
+
+	resp, err := client.Do(request)
+	if err != nil {
+		return err
+	}
+
+	if resp.StatusCode != 200 {
+		return fmt.Errorf("error moving single item to folder: %s (%d)", resp.Status, resp.StatusCode)
+	}
+
+	defer resp.Body.Close()
+	res := SimpleResponse{}
+	log.Trace("Reading response")
+	err = json.NewDecoder(resp.Body).Decode(&res)
+
+	if err != nil {
+		return err
+	}
+
+	if res.Status != "success" {
+		return fmt.Errorf(res.Message)
+	}
+
+	log.Tracef("Item moved: %+v", res)
+
+	return nil
+}
+
 func (pm *Premiumizeme) CreateFolder(folderName string, parentID *string) (string, error) {
 	if pm.APIKey == "" {
 		return "", ErrAPIKeyNotSet
