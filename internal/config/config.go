@@ -171,8 +171,8 @@ func defaultConfig() Config {
 }
 
 var (
-	ErrDownloadDirectorySetToRoot    = errors.New("Download directory set to root")
-	ErrDownloadDirectoryNotWriteable = errors.New("Download directory not writeable")
+	ErrDownloadDirectorySetToRoot    = errors.New("download directory set to root")
+	ErrDownloadDirectoryNotWriteable = errors.New("download directory not writeable")
 )
 
 func (c *Config) GetDownloadsBaseLocation() (string, error) {
