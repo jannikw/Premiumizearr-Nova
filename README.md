@@ -1,9 +1,9 @@
 # Premiumizearr-Nova
-## Build 1.4.0
+## Build 1.4.3
 
 [![Build](https://github.com/ensingerphilipp/premiumizearr-nova/actions/workflows/build.yml/badge.svg)](https://github.com/ensingerphilipp/premiumizearr-nova/actions/workflows/build.yml)
 
-*NEW: Revamped Download to use **direct file downloads** instead of the slow ZIP-API*
+*NEW: Ability to Limit Download-Speed, Bugfixes for Single File Downloads*
 
 ## Overview
 Continuation and Improvement of the Premiumizearr Arr* Bridge Download Client compatible with Sonarr and Radarr.
@@ -14,6 +14,7 @@ The code has been reused with modifications to suit my own use case.
 
 * Mostly fixes EOF Datastream Error
 * Drastically improved download speed
+* Possibility to Limit Downloadspeed
 * Downloads try to resume 
 * Added .torrent support
 * Updated base images and dependencies
