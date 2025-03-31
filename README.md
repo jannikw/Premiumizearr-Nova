@@ -57,7 +57,7 @@ docker run -d --name premiumizearr \
   -e PUID=1000 \
   -p 8182:8182 \
   --restart unless-stopped \
-  ghcr.io/ensingerphilipp/premiumizearr-nova
+  ghcr.io/ensingerphilipp/premiumizearr-nova:latest
 ```
 
 If you wish to increase logging (which you'll be asked to do if you submit an issue) you can add `-e PREMIUMIZEARR_LOG_LEVEL=trace` to the command
