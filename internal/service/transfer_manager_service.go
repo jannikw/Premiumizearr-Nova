@@ -271,6 +271,8 @@ func (manager *TransferManagerService) HandleFinishedItem(item premiumizeme.Item
 	}
 
 	manager.addDownload(&item)
+	//Sleep for one Second so Downloads are sortable by Time Added
+	time.Sleep(time.Second * 1)
 	go func() {
 		defer manager.removeDownload(item.Name)
 		err := manager.downloadFolderRecursively(item, downloadDirectory)
@@ -311,6 +313,8 @@ func (manager *TransferManagerService) downloadFolderRecursively(item premiumize
 		}
 		if item.Type == "file" {
 			manager.addDownload(&item)
+			//Sleep for one Second so Downloads are sortable by Time Added
+			time.Sleep(time.Second * 1)
 			link, err := manager.premiumizemeClient.GenerateFileLink(item.ID)
 			if err != nil {
 				log.Debugf("File Link Generation err: %s", err)
