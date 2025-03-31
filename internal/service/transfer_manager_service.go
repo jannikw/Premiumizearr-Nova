@@ -2,7 +2,6 @@ package service
 
 import (
 	"fmt"
-	"math"
 	"os"
 	"path"
 	"path/filepath"
@@ -217,8 +216,8 @@ func (manager *TransferManagerService) addDownload(item *premiumizeme.Item) {
 func (manager *TransferManagerService) countDownloads() int {
 	manager.downloadListMutex.Lock()
 	defer manager.downloadListMutex.Unlock()
-	// Calculate len(manager.downloadList) / 2 and apply math.Ceil as every download also has a Parent Folder in manager.downloadList
-	return int(math.Ceil(float64(len(manager.downloadList)) / 2))
+	// Calculate len(manager.downloadList) / 2 as every download also has a Parent Folder in manager.downloadList
+	return (len(manager.downloadList) / 2)
 }
 
 func (manager *TransferManagerService) removeDownload(name string) {
