@@ -110,7 +110,7 @@ func GetDownloadsFolderIDFromPremiumizeme(premiumizemeClient *premiumizeme.Premi
 	}
 
 	if len(downloadsFolderID) == 0 {
-		id, err := premiumizemeClient.CreateFolder(folderName)
+		id, err := premiumizemeClient.CreateFolder(folderName, nil)
 		if err != nil {
 			log.Errorf("Cannot create downloads folder on premiumize.me, application will not run correctly! %+v", err)
 		}

@@ -271,7 +271,7 @@ func (pm *Premiumizeme) DeleteFolder(folderID string) error {
 	return nil
 }
 
-func (pm *Premiumizeme) CreateFolder(folderName string) (string, error) {
+func (pm *Premiumizeme) CreateFolder(folderName string, parentID *string) (string, error) {
 	if pm.APIKey == "" {
 		return "", ErrAPIKeyNotSet
 	}
@@ -283,6 +283,9 @@ func (pm *Premiumizeme) CreateFolder(folderName string) (string, error) {
 
 	q := url.Query()
 	q.Set("name", folderName)
+	if parentID != nil {
+		q.Set("parent_id", *parentID)
+	}
 	url.RawQuery = q.Encode()
 
 	client := &http.Client{}
@@ -295,16 +298,15 @@ func (pm *Premiumizeme) CreateFolder(folderName string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	defer resp.Body.Close()
 
 	if resp.StatusCode != 200 {
 		return "", fmt.Errorf("error creating folder: %s (%d)", resp.Status, resp.StatusCode)
 	}
 
-	defer resp.Body.Close()
 	res := CreateFolderResponse{}
 	log.Trace("Reading response")
 	err = json.NewDecoder(resp.Body).Decode(&res)
-
 	if err != nil {
 		return "", err
 	}
@@ -314,7 +316,6 @@ func (pm *Premiumizeme) CreateFolder(folderName string) (string, error) {
 	}
 
 	log.Tracef("Folder created: %+v", res)
-
 	return res.ID, nil
 }
 

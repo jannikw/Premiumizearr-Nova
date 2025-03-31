@@ -253,10 +253,14 @@ func (manager *TransferManagerService) HandleFinishedItem(item premiumizeme.Item
 		return
 	}
 
-	if item.Type != "folder" {
-		log.Errorf("Transfered Item is not a folder -> not implemented - cant be handled, please put single file into a folder: %s", item.Name)
-		return
+	if item.Type == "file" {
+		log.Tracef("Handling Item Type File in finished Transfer %s", item.Name)
+
+		// Create Folder with Item Name
+		// Move Item into Folder
+
 	}
+
 	//TODO Implement download of single Files
 	/* 	if item.Type == "file" {
 		log.Debugf("Item is type single file", item.Name)
@@ -295,6 +299,11 @@ func (manager *TransferManagerService) HandleFinishedItem(item premiumizeme.Item
 
 	//Adding of the Root-Parent-Folder of the Transfer prevents the transfer from being downloaded multiple times
 	//TODO Needs to be adjusted so the LockItem is not visible in the downloadList
+	if item.Type != "folder" {
+		log.Errorf("Item Type mismatch when trying to handle finished Transfer %s | %s", item.Name, item.Type)
+		return
+	}
+
 	manager.addDownload(&item)
 	go func() {
 		defer manager.removeDownload(item.Name)
