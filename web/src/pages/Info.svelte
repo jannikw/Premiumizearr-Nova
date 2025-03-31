@@ -1,7 +1,6 @@
 <script>
   import APITable from "../components/APITable.svelte";
   import { Row, Column } from "carbon-components-svelte";
-  import {DateTime} from "luxon";
 
   let dlSpeed = 0;
 
@@ -54,24 +53,45 @@
     }
   }
 
-  function dataToRows(data) {
+  function dataToRowsDownload(data) {
+    console.log("Transforming data:", data); // Log the input data
     if (!data) return [];
-    dlSpeed = 0;
-    return data
-        .sort((a, b) => a.added - b.added) // Sort by "added" timestamp
-        .map(d => {
-            let speed = parseDLSpeedFromMessage(d.message);
-            if (!Number.isNaN(speed)) dlSpeed += speed;
 
-            return {
-                id: d.id,
-                name: d.name,
-                status: d.status,
-                progress: (d.progress * 100).toFixed(0) + "%",
-                message: d.message,
-            };
-        });
-}
+    // Filter out rows with "0% Complete (0 B)" or similar variations
+    const filteredData = data.filter(d => {
+      console.log("Progress field values:", d.progress); // Log each progress field
+      return !d.progress.includes("(0 B)");
+    });
+
+    const transformed = filteredData.map((d, index) => ({
+      id: d.id || index, // Use `d.id` if available, otherwise fallback to the index
+      added: d.added,
+      name: d.name,
+      progress: d.progress,
+      speed: d.speed,
+    }));
+
+    console.log("Transformed Info rows:", transformed); // Log the transformed rows
+    return transformed;
+  }
+
+  function dataToRows(data) {
+      if (!data) return [];
+
+      let dlSpeed = 0;
+
+      return data.map(d => {
+          let speed = parseDLSpeedFromMessage(d.message);
+          if (!Number.isNaN(speed)) dlSpeed += speed;
+
+          return {
+              name: d.name,
+              status: d.status,
+              progress: (d.progress * 100).toFixed(0) + "%",
+              message: d.message,
+          };
+      });
+  }
 
 </script>
 
@@ -102,7 +122,7 @@
           APIpath="api/downloads"
           zebra={true}
           totalName="Downloading: "
-          transform={dataToRows}
+          transform={dataToRowsDownload}
         />
       </Column>
     </Row>

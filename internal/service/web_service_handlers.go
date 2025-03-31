@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"path"
+	"sort"
 
 	"github.com/ensingerphilipp/premiumizearr-nova/internal/config"
 	"github.com/ensingerphilipp/premiumizearr-nova/pkg/premiumizeme"
@@ -53,7 +54,21 @@ func (s *WebServerService) DownloadsHandler(w http.ResponseWriter, r *http.Reque
 	if s.transferManager == nil {
 		resp.Status = "Not Initialized"
 	} else {
-		for _, v := range s.transferManager.GetDownloads() {
+		downloads := s.transferManager.GetDownloads()
+
+		// Collect downloads into a slice for sorting
+		sortedDownloads := make([]*DownloadDetails, 0, len(downloads))
+		for _, v := range downloads {
+			sortedDownloads = append(sortedDownloads, v)
+		}
+
+		// Sort downloads by Name
+		sort.Slice(sortedDownloads, func(i, j int) bool {
+			return sortedDownloads[i].Name < sortedDownloads[j].Name
+		})
+
+		// Build the response
+		for _, v := range sortedDownloads {
 			resp.Downloads = append(resp.Downloads, Download{
 				Added:    v.Added.Unix(),
 				Name:     v.Name,
