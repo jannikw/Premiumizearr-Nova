@@ -21,6 +21,7 @@ The code has been reused with modifications to suit my own use case.
 
 Next Steps:
 * Add Lidarr Support
+* Fix Sonarr Connection Bugs
 
 ## Features
 
