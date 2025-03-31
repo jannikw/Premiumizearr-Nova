@@ -316,10 +316,12 @@
           labelText="Simultaneous Downloads"
           bind:value={config.SimultaneousDownloads}
         />
+      </FormGroup>
+      <FormGroup>
         <TextInput
           type="number"
           disabled={inputDisabled}
-          labelText="DownloadSpeedLimit"
+          labelText="SpeedLimit Downloads"
           bind:value={config.DownloadSpeedLimit}
         />
       </FormGroup>
