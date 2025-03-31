@@ -257,7 +257,7 @@ func (manager *TransferManagerService) HandleFinishedItem(item premiumizeme.Item
 	if item.Type == "file" {
 		log.Tracef("Handling Item Type File in finished Transfer %s", item.Name)
 
-		id, err := manager.premiumizemeClient.CreateFolder(item.Name, &manager.downloadsFolderID)
+		id, err := manager.premiumizemeClient.CreateFolder(item.Name+".folder", &manager.downloadsFolderID)
 		if err != nil {
 			log.Errorf("Cannot create Folder for Single File Download! %+v", err)
 		}
