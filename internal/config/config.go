@@ -1,4 +1,5 @@
 package config
+
 import (
 	"errors"
 	"io/ioutil"
@@ -8,9 +9,7 @@ import (
 
 	"os"
 	"path"
-	"path/filepath"
-	"crypto/sha256"
-	"encoding/hex"
+
 	"gopkg.in/yaml.v2"
 )
 
@@ -28,17 +27,15 @@ func LoadOrCreateConfig(altConfigLocation string, _appCallback AppCallback) (Con
 		}
 	}
 
-	// Override unzip directory if running in docker
+	// Override directory if running in docker
 	if utils.IsRunningInDockerContainer() {
-		log.Info("Running in docker, overriding unzip directory!")
-		config.UnzipDirectory = "/unzip"
 		// Override config data directories if blank
 		if config.BlackholeDirectory == "" {
-			log.Trace("Running in docker, overriding blank directory settings for blackhole directory")
+			log.Trace("Running in docker, overriding blank directory settings for blackhole directory to /blackhole inside the container")
 			config.BlackholeDirectory = "/blackhole"
 		}
 		if config.DownloadsDirectory == "" {
-			log.Trace("Running in docker, overriding blank directory settings for downloads directory")
+			log.Trace("Running in docker, overriding blank directory settings for downloads directory to /downloads inside the container")
 			config.DownloadsDirectory = "/downloads"
 		}
 	}
@@ -165,7 +162,6 @@ func defaultConfig() Config {
 		PollBlackholeDirectory:          false,
 		PollBlackholeIntervalMinutes:    10,
 		DownloadsDirectory:              "",
-		UnzipDirectory:                  "",
 		BindIP:                          "0.0.0.0",
 		BindPort:                        "8182",
 		WebRoot:                         "",
@@ -175,58 +171,26 @@ func defaultConfig() Config {
 }
 
 var (
-	ErrUnzipDirectorySetToRoot    = errors.New("unzip directory set to root")
-	ErrUnzipDirectoryNotWriteable = errors.New("unzip directory not writeable")
+	ErrDownloadDirectorySetToRoot    = errors.New("Download directory set to root")
+	ErrDownloadDirectoryNotWriteable = errors.New("Download directory not writeable")
 )
 
-func (c *Config) GetUnzipBaseLocation() (string, error) {
-	if c.UnzipDirectory == "" {
-		log.Tracef("Unzip directory not set, using default: %s", os.TempDir())
+func (c *Config) GetDownloadsBaseLocation() (string, error) {
+	if c.DownloadsDirectory == "" {
+		log.Tracef("Download directory not set, using default: %s", os.TempDir())
 		return path.Join(os.TempDir(), "premiumizearrd"), nil
 	}
 
-	if c.UnzipDirectory == "/" || c.UnzipDirectory == "\\" || c.UnzipDirectory == "C:\\" {
-		log.Error("Unzip directory set to root, please set a directory")
-		return "", ErrUnzipDirectorySetToRoot
+	if c.DownloadsDirectory == "/" || c.DownloadsDirectory == "\\" || c.DownloadsDirectory == "C:\\" {
+		log.Error("Download directory set to root, please set a directory")
+		return "", ErrDownloadDirectorySetToRoot
 	}
 
-	if !utils.IsDirectoryWriteable(c.UnzipDirectory) {
-		log.Errorf("Unzip directory not writeable: %s", c.UnzipDirectory)
-		return c.UnzipDirectory, ErrUnzipDirectoryNotWriteable
+	if !utils.IsDirectoryWriteable(c.DownloadsDirectory) {
+		log.Errorf("Download directory not writeable: %s", c.DownloadsDirectory)
+		return c.DownloadsDirectory, ErrDownloadDirectoryNotWriteable
 	}
 
-	log.Tracef("Unzip directory set to: %s", c.UnzipDirectory)
-	return c.UnzipDirectory, nil
-}
-
-func (c *Config) GetNewUnzipLocation(ID string) (string, error) {
-	// Create base directory for unzipped files
-	tempDir, err := c.GetUnzipBaseLocation()
-	if err != nil {
-		return "", err
-	}
-
-	log.Trace("Creating unzip directory")
-	err = os.MkdirAll(tempDir, os.ModePerm)
-	if err != nil {
-		return "", err
-	}
-
-	// Generate a unique hash for the link
-	hash := sha256.Sum256([]byte(ID))
-	hashStr := hex.EncodeToString(hash[:])
-
-	// Truncate the hash to a shorter length (e.g., first 12 characters)
-	truncatedHash := hashStr[:12]
-
-	// Create the final directory path using the truncated hash
-	dir := filepath.Join(tempDir, "unzip-"+truncatedHash)
-
-	log.Trace("Creating generated unzip directory")
-	err = os.MkdirAll(dir, os.ModePerm)
-	if err != nil {
-		return "", err
-	}
-
-	return dir, nil
+	log.Tracef("Download directory set to: %s", c.DownloadsDirectory)
+	return c.DownloadsDirectory, nil
 }

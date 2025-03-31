@@ -26,7 +26,6 @@
     PollBlackholeDirectory: false,
     PollBlackholeIntervalMinutes: 10,
     DownloadsDirectory: "",
-    UnzipDirectory: "",
     BindIP: "",
     BindPort: "",
     WebRoot: "",
@@ -288,11 +287,6 @@
           disabled={inputDisabled}
           labelText="Download Directory"
           bind:value={config.DownloadsDirectory}
-        />
-        <TextInput
-          disabled={inputDisabled}
-          labelText="Unzip Directory"
-          bind:value={config.UnzipDirectory}
         />
       </FormGroup>
       <h4>Web Server Settings</h4>

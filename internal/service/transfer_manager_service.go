@@ -5,7 +5,6 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"strings"
 	"sync"
 	"time"
 
@@ -54,29 +53,29 @@ func (t *TransferManagerService) Init(pme *premiumizeme.Premiumizeme, arrsManage
 	t.premiumizemeClient = pme
 	t.arrsManager = arrsManager
 	t.config = config
-	t.CleanUpUnzipDirPeriod()
+	t.CleanUpDownloadDirPeriod()
 }
 
-func (t *TransferManagerService) CleanUpUnzipDirPeriod() {
-	log.Info("Cleaning unzip directory - deleting files older than 4 days")
+func (t *TransferManagerService) CleanUpDownloadDirPeriod() {
+	log.Info("Cleaning download directory - deleting files older than 4 days")
 
-	unzipBase, err := t.config.GetUnzipBaseLocation()
+	downloadBase, err := t.config.GetDownloadsBaseLocation()
 	if err != nil {
-		log.Errorf("Error getting unzip base location: %s", err.Error())
+		log.Errorf("Error getting download base location: %s", err.Error())
 		return
 	}
 
 	// Define the threshold for deletion: 4 days
 	threshold := time.Now().AddDate(0, 0, -4)
 
-	err = filepath.Walk(unzipBase, func(path string, info os.FileInfo, err error) error {
+	err = filepath.Walk(downloadBase, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			log.Warnf("Error accessing path %s: %s", path, err.Error())
 			return nil // Continue processing other files/directories
 		}
 
 		// Skip the base directory itself
-		if path == unzipBase {
+		if path == downloadBase {
 			return nil
 		}
 
@@ -94,32 +93,31 @@ func (t *TransferManagerService) CleanUpUnzipDirPeriod() {
 	})
 
 	if err != nil {
-		log.Errorf("Error cleaning unzip directory: %s", err.Error())
+		log.Errorf("Error cleaning download directory: %s", err.Error())
 	}
 }
 
-func (t *TransferManagerService) CleanUpUnzipDir() {
-	log.Info("Cleaning unzip directory")
+func (t *TransferManagerService) CleanUpDownloadDir() {
+	log.Info("Cleaning download directory")
 
-	unzipBase, err := t.config.GetUnzipBaseLocation()
+	downloadBase, err := t.config.GetDownloadsBaseLocation()
 	if err != nil {
-		log.Errorf("Error getting unzip base location: %s", err.Error())
+		log.Errorf("Error getting download base location: %s", err.Error())
 		return
 	}
 
-	err = utils.RemoveContents(unzipBase)
+	err = utils.RemoveContents(downloadBase)
 	if err != nil {
-		log.Errorf("Error cleaning unzip directory: %s", err.Error())
+		log.Errorf("Error cleaning download directory: %s", err.Error())
 		return
 	}
 
 }
 
 func (manager *TransferManagerService) ConfigUpdatedCallback(currentConfig config.Config, newConfig config.Config) {
-	// Todo Change to Downloads-Directory and rmeove Zip Download functionality
-	if currentConfig.UnzipDirectory != newConfig.UnzipDirectory {
+	if currentConfig.DownloadsDirectory != newConfig.DownloadsDirectory {
 		log.Trace("Inside ConfigUpdatedCallback")
-		manager.CleanUpUnzipDir()
+		manager.CleanUpDownloadDir()
 	}
 }
 
@@ -191,13 +189,7 @@ func (manager *TransferManagerService) TaskCheckPremiumizeDownloadsFolder() {
 	for _, item := range items {
 		if manager.countDownloads() < manager.config.SimultaneousDownloads {
 			log.Debugf("Processing completed item: %s", item.Name)
-			//TODO Remove Zip capability
-			var zip bool = false
-			if zip == true {
-				manager.HandleFinishedItemZip(item, manager.config.DownloadsDirectory)
-			} else {
-				manager.HandleFinishedItem(item, manager.config.DownloadsDirectory)
-			}
+			manager.HandleFinishedItem(item, manager.config.DownloadsDirectory)
 		} else {
 			log.Debugf("Not processing any more transfers, %d are running and cap is %d", manager.countDownloads(), manager.config.SimultaneousDownloads)
 			break
@@ -338,90 +330,4 @@ func (manager *TransferManagerService) downloadFolderRecursively(item premiumize
 		}
 	}
 	return nil
-}
-
-// Returns when the download has been added to the list
-func (manager *TransferManagerService) HandleFinishedItemZip(item premiumizeme.Item, downloadDirectory string) {
-	if manager.downloadExists(item.Name) {
-		log.Tracef("Transfer %s is already downloading", item.Name)
-		return
-	}
-
-	manager.addDownload(&item)
-
-	go func() {
-		log.Debug("Downloading: ", item.Name)
-		log.Tracef("%+v", item)
-		var link string
-		var err error
-		if item.Type == "file" {
-			link, err = manager.premiumizemeClient.GenerateZippedFileLink(item.ID)
-		} else if item.Type == "folder" {
-			link, err = manager.premiumizemeClient.GenerateZippedFolderLink(item.ID)
-		} else {
-			log.Errorf("Item is not of type 'file' or 'folder' !! Can't download %s", item.Name)
-			return
-		}
-		if err != nil {
-			log.Errorf("Error generating download link: %s", err)
-			manager.removeDownload(item.Name)
-			return
-		}
-		log.Trace("Downloading from: ", link)
-
-		splitString := strings.Split(link, "/")
-
-		tempDir, err := manager.config.GetNewUnzipLocation(item.ID)
-		if err != nil {
-			log.Errorf("Could not create temp dir: %s", err)
-			manager.removeDownload(item.Name)
-			return
-		}
-
-		savePath := path.Join(tempDir, (item.Name + "/"))
-		log.Trace("Creating DownloadDirectory: ", savePath)
-		err = os.Mkdir(savePath, os.ModePerm)
-		if err != nil {
-			log.Errorf("Could not create save path: %s", err)
-			//		manager.removeDownload(item.Name)
-			//		return fmt.Errorf("error creating save path: %w", err)
-		}
-
-		var fileSavePath string = path.Join(savePath, splitString[len(splitString)-1])
-		log.Trace("Downloading to: ", fileSavePath)
-
-		err = progress_downloader.DownloadFile(link, fileSavePath, manager.downloadList[item.Name].ProgressDownloader)
-
-		if err != nil {
-			log.Errorf("Could not download file: %s", err)
-			manager.removeDownload(item.Name)
-			return
-		}
-
-		log.Tracef("Unzipping %s to %s", savePath, downloadDirectory)
-		err = utils.Unzip(savePath, downloadDirectory)
-		if err != nil {
-			log.Errorf("Could not unzip file: %s", err)
-			manager.removeDownload(item.Name)
-			return
-		}
-
-		log.Tracef("Removing zip %s from system", savePath)
-		err = os.RemoveAll(savePath)
-		if err != nil {
-			manager.removeDownload(item.Name)
-			log.Errorf("Could not remove zip: %s", err)
-			return
-		}
-
-		err = manager.premiumizemeClient.DeleteFolder(item.ID)
-		if err != nil {
-			manager.removeDownload(item.Name)
-			log.Error("Error deleting folder on premiumize.me: %s", err)
-			return
-		}
-
-		//Remove download entry from downloads map
-		manager.removeDownload(item.Name)
-	}()
 }

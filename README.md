@@ -38,7 +38,7 @@ Next Steps:
 ### Docker
 It is highly recommended to use the amd64 and arm64 docker images.
 
-1. First create data, blackhole, downloads and unzip folders that will be mounted into the docker container.
+1. First create data, blackhole, downloads folders that will be mounted into the docker container.
 2. Make sure all Folders and are writeable and readable by UID 1000 and GID 1000
 3. Create or choose a network for the docker container to run in - **Important, if you have connection problems try explicitly disabling ipv6 for your docker network or docker daemon as ipv6 might break some things - see https://github.com/ensingerphilipp/Premiumizearr-Nova/issues/12**
 5. Adapt the command below with the correct folders and network to run
@@ -53,7 +53,6 @@ docker run -d --name premiumizearr \
   -v /mount/premiumize/data:/data \
   -v /mount/premiumize/blackhole:/blackhole \
   -v /mount/premiumize/downloads:/downloads \
-  -v /mount/premiumize/unzip:/unzip \
   -e PGID=1000 \
   -e PUID=1000 \
   -p 8182:8182 \

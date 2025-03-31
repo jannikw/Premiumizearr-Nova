@@ -41,8 +41,6 @@ type Config struct {
 
 	DownloadsDirectory string `yaml:"DownloadsDirectory" json:"DownloadsDirectory"`
 
-	UnzipDirectory string `yaml:"UnzipDirectory" json:"UnzipDirectory"`
-
 	BindIP   string `yaml:"bindIP" json:"BindIP"`
 	BindPort string `yaml:"bindPort" json:"BindPort"`
 
