@@ -4,6 +4,7 @@
 [![Build](https://github.com/ensingerphilipp/premiumizearr-nova/actions/workflows/build.yml/badge.svg)](https://github.com/ensingerphilipp/premiumizearr-nova/actions/workflows/build.yml)
 
 *NEW: Ability to Limit Download-Speed, Bugfixes for Single File Downloads*
+
 *NEW: Fixed Gui Ordering and API Transforms*
 
 ## Overview
