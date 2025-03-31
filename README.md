@@ -14,16 +14,12 @@ This project is based on code from [Jackdallas' Premiumizearr](https://github.co
 It aims to improve its function and fix bugs as the Original Repo has gone stale and does not respond to issues and pull requests.
 The code has been reused with modifications to suit my own use case.
 
-* Mostly fixes EOF Datastream Error
-* Drastically improved download speed
-* Possibility to Limit Downloadspeed
-* Downloads try to resume 
-* Added .torrent support
+* Complete Downloader Revamp (Fix EOF DataStream Error, Improve Speed, Graceful Resumable Downloads, Limitable Downloadspeed)
+* Added .torrent support, Add Support for Single Files, Switch from ZIP API to Direct Download
+* Fix Gui Row Ordering Bugs, Improve API
 * Updated base images and dependencies
-* Changed Zip Downloads to Direct Downloads for stability and speed
 
 Next Steps:
-* Fix GUI Bugs
 * Add Lidarr Support
 
 ## Features
