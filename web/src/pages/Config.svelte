@@ -30,6 +30,7 @@
     BindPort: "",
     WebRoot: "",
     SimultaneousDownloads: 0,
+    DownloadSpeedLimit: 100,
     Arrs: [],
   };
   const ERR_SAVE = "Error Saving Config";
@@ -314,6 +315,12 @@
           disabled={inputDisabled}
           labelText="Simultaneous Downloads"
           bind:value={config.SimultaneousDownloads}
+        />
+        <TextInput
+          type="number"
+          disabled={inputDisabled}
+          labelText="DownloadSpeedLimit"
+          bind:value={config.DownloadSpeedLimit}
         />
       </FormGroup>
       <Button on:click={submit} icon={saveIcon} disabled={inputDisabled}

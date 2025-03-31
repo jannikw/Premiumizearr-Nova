@@ -47,6 +47,7 @@ type Config struct {
 	WebRoot string `yaml:"WebRoot" json:"WebRoot"`
 
 	SimultaneousDownloads int `yaml:"SimultaneousDownloads" json:"SimultaneousDownloads"`
+	DownloadSpeedLimit    int `yaml:"DownloadSpeedLimit" json:"DownloadSpeedLimit"`
 
 	ArrHistoryUpdateIntervalSeconds int `yaml:"ArrHistoryUpdateIntervalSeconds" json:"ArrHistoryUpdateIntervalSeconds"`
 }

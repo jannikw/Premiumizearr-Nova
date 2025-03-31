@@ -119,6 +119,12 @@ func loadConfigFromDisk(altConfigLocation string) (Config, error) {
 		updated = true
 	}
 
+	if configInterface["DownloadSpeedLimit"] == nil {
+		log.Info("DownloadSpeedLimit not set, setting to 100 Megabytes per second")
+		config.DownloadSpeedLimit = 100
+		updated = true
+	}
+
 	if configInterface["PollBlackholeIntervalMinutes"] == nil {
 		log.Info("PollBlackholeIntervalMinutes not set, setting to 10")
 		config.PollBlackholeIntervalMinutes = 10
@@ -166,6 +172,7 @@ func defaultConfig() Config {
 		BindPort:                        "8182",
 		WebRoot:                         "",
 		SimultaneousDownloads:           5,
+		DownloadSpeedLimit:              100,
 		ArrHistoryUpdateIntervalSeconds: 20,
 	}
 }

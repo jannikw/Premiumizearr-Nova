@@ -14,3 +14,4 @@ bindIP: 0.0.0.0
 bindPort: "8182"
 WebRoot: ""
 SimultaneousDownloads: 5
+DownloadSpeedLimit: 100

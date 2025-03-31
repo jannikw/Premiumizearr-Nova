@@ -41,9 +41,9 @@ func (wc *WriteCounter) GetProgress() string {
 }
 
 // DownloadFile uses wget for downloading and updates WriteCounter for progress tracking.
-func DownloadFile(url string, filepath string, counter *WriteCounter) error {
+func DownloadFile(ratelimit string, url string, filepath string, counter *WriteCounter) error {
 	// Prepare the wget command
-	cmd := exec.Command("stdbuf", "-oL", "wget", "-c", "--progress=dot:giga", "--no-use-server-timestamps", "-O", filepath, url)
+	cmd := exec.Command("stdbuf", "-oL", "wget", "-c", ratelimit, "--progress=dot:giga", "--no-use-server-timestamps", "-O", filepath, url)
 	// Get a pipe for the command's output
 	stdout, err := cmd.StderrPipe()
 	if err != nil {

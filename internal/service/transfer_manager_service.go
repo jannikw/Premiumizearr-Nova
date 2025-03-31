@@ -2,9 +2,11 @@ package service
 
 import (
 	"fmt"
+	"math"
 	"os"
 	"path"
 	"path/filepath"
+	"strconv"
 	"sync"
 	"time"
 
@@ -215,8 +217,8 @@ func (manager *TransferManagerService) addDownload(item *premiumizeme.Item) {
 func (manager *TransferManagerService) countDownloads() int {
 	manager.downloadListMutex.Lock()
 	defer manager.downloadListMutex.Unlock()
-
-	return len(manager.downloadList)
+	// Calculate len(manager.downloadList) / 2 and apply math.Ceil as every download also has a Parent Folder in manager.downloadList
+	return int(math.Ceil(float64(len(manager.downloadList)) / 2))
 }
 
 func (manager *TransferManagerService) removeDownload(name string) {
@@ -321,7 +323,8 @@ func (manager *TransferManagerService) downloadFolderRecursively(item premiumize
 			}
 			var fileSavePath = path.Join(savePath, item.Name)
 			log.Trace("Downloading to: ", fileSavePath)
-			err = progress_downloader.DownloadFile(link, fileSavePath, manager.downloadList[item.Name].ProgressDownloader)
+			var ratelimit string = "--limit-rate=" + strconv.Itoa(manager.config.DownloadSpeedLimit) + "M"
+			err = progress_downloader.DownloadFile(ratelimit, link, fileSavePath, manager.downloadList[item.Name].ProgressDownloader)
 			if err != nil {
 				return fmt.Errorf("error downloading file %s: %w", item.Name, err)
 			}
