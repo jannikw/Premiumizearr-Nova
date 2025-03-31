@@ -1,9 +1,10 @@
 # Premiumizearr-Nova
-## Build 1.4.3
+## Build 1.4.4
 
 [![Build](https://github.com/ensingerphilipp/premiumizearr-nova/actions/workflows/build.yml/badge.svg)](https://github.com/ensingerphilipp/premiumizearr-nova/actions/workflows/build.yml)
 
 *NEW: Ability to Limit Download-Speed, Bugfixes for Single File Downloads*
+*NEW: Fixed Gui Ordering and API Transforms*
 
 ## Overview
 Continuation and Improvement of the Premiumizearr Arr* Bridge Download Client compatible with Sonarr and Radarr.
