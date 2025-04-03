@@ -1,6 +1,8 @@
 module github.com/ensingerphilipp/premiumizearr-nova
 
-go 1.17
+go 1.23.0
+
+toolchain go1.23.2
 
 require (
 	github.com/dustin/go-humanize v1.0.1
@@ -13,7 +15,7 @@ require (
 )
 
 require (
-	golang.org/x/net v0.34.0 // indirect
-	golang.org/x/sys v0.29.0 // indirect
+	golang.org/x/net v0.37.0 // indirect
+	golang.org/x/sys v0.31.0 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1 // indirect
 )
