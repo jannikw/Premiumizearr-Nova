@@ -191,6 +191,8 @@ func (manager *TransferManagerService) TaskCheckPremiumizeDownloadsFolder() {
 		if manager.countDownloads() < manager.config.SimultaneousDownloads {
 			log.Debugf("Processing completed item: %s", item.Name)
 			manager.HandleFinishedItem(item, manager.config.DownloadsDirectory)
+			//Sleep for one Second to let Asynchronous Downloads Start and Update
+			time.Sleep(time.Second * 1)
 		} else {
 			log.Debugf("Not processing any more transfers, %d are running and cap is %d", manager.countDownloads(), manager.config.SimultaneousDownloads)
 			break
@@ -252,17 +254,18 @@ func (manager *TransferManagerService) HandleFinishedItem(item premiumizeme.Item
 
 		id, err := manager.premiumizemeClient.CreateFolder(item.Name+".folder", &manager.downloadsFolderID)
 		if err != nil {
-			log.Errorf("Cannot create Folder for Single File Download! %+v", err)
+			log.Errorf("cannot create Folder for Single File Download! %+v", err)
+			return
 		}
 		var singleFileFolderID string = id
 
 		err = manager.premiumizemeClient.MoveItem(item.ID, singleFileFolderID)
 		if err != nil {
-			log.Errorf("Cannot move Single File to Folder for Download!  %+v", err)
+			log.Errorf("cannot move Single File to Folder for Download!  %+v", err)
+			return
 		}
 
 		log.Infof("Single File moved to Folder for Download %s", item.Name)
-
 		return
 	}
 
@@ -272,8 +275,6 @@ func (manager *TransferManagerService) HandleFinishedItem(item premiumizeme.Item
 	}
 
 	manager.addDownload(&item)
-	//Sleep for one Second so Downloads are sortable by Time Added
-	time.Sleep(time.Second * 1)
 	go func() {
 		defer manager.removeDownload(item.Name)
 		err := manager.downloadFolderRecursively(item, downloadDirectory)
@@ -302,9 +303,10 @@ func (manager *TransferManagerService) downloadFolderRecursively(item premiumize
 	log.Trace("Downloading to: ", savePath)
 	err = os.Mkdir(savePath, os.ModePerm)
 	if err != nil {
-		log.Errorf("Could not create save path: %s", err)
+		log.Errorf("could not create save path: %s", err)
 		//		manager.removeDownload(item.Name)
 		//		return fmt.Errorf("error creating save path: %w", err)
+		//		no return due to os permissions sometime inaccurately throwing errors on different configurations
 	}
 
 	for _, item := range items {
@@ -314,8 +316,6 @@ func (manager *TransferManagerService) downloadFolderRecursively(item premiumize
 		}
 		if item.Type == "file" {
 			manager.addDownload(&item)
-			//Sleep for one Second so Downloads are sortable by Time Added
-			time.Sleep(time.Second * 1)
 			link, err := manager.premiumizemeClient.GenerateFileLink(item.ID)
 			if err != nil {
 				log.Debugf("File Link Generation err: %s", err)
