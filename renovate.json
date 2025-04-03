@@ -1,0 +1,18 @@
+{
+  "extends": ["config:base"],
+  "labels": ["dependencies"],
+  "prBodyColumns": ["package", "from", "to", "changelog"],
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["major"],
+      "labels": ["breaking change"],
+      "automerge": false
+    },
+    {
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": false
+    }
+  ],
+  "prHourlyLimit": 5,
+  "prConcurrentLimit": 10
+}
