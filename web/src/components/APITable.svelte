@@ -6,7 +6,7 @@
   export let headers = [];
   export let APIpath = "";
   export let updateTimeSeconds = 5;
-  export let zebra = false;
+  export const zebra = true;
   export let totalName = "";
   export let transform = (data) => data; // Default transform function
 
