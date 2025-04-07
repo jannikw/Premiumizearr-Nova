@@ -150,6 +150,9 @@
           if (!Number.isNaN(speed)) dlSpeed += speed;
 
           return {
+              // Using nullish coalescing (??) is generally safer than || for IDs
+              // as it handles 0 or empty string correctly if they are valid IDs.
+              id: d.id ?? index,            
               name: d.name,
               status: d.status,
               progress: (d.progress * 100).toFixed(0) + "%",
