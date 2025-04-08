@@ -31,7 +31,7 @@ Next Steps:
 
 ## Support the project by using my invite code or Ko-Fi
 
-[Ko-Fi](https://ko-fi.com/ensingerphilipp)
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/K3K819CODS)
 
 ## Install
 
